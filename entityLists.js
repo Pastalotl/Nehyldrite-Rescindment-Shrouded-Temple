@@ -71,7 +71,7 @@ entityRecipes.set("pot small",{imagePath:"./Assets/Objects/Pot-small.png",width:
 entityRecipes.set("pot large",{imagePath:"./Assets/Objects/Pot-large.png",width:32,height:32,sheetInfo:[{animation:"intact",frames:1},{animation:"destroy",frames:4}],yOffset:8,radius:11,health:2})
 entityRecipes.set("pillar round",{imagePath:"./Assets/Objects/pillar.png",width:32,height:64,sheetInfo:[{animation:"intact",frames:1}],yOffset:23,radius:16,health:574})
 entityRecipes.set("pillar square",{imagePath:"./Assets/Objects/pillar-wall.png",width:34,height:52,sheetInfo:[{animation:"intact",frames:1}],yOffset:17,radius:16,health:574})
-entityRecipes.set("chest-right",{imagePath:"./Assets/Objects/Chest.png",width:32,height:32,sheetInfo:[{animation:"closed",frames:1},{animation:"open",frames:1}],yOffset:9,radius:11,health:1})
+entityRecipes.set("chest-right",{imagePath:"./Assets/Objects/chest.png",width:32,height:32,sheetInfo:[{animation:"closed",frames:1},{animation:"open",frames:1}],yOffset:9,radius:11,health:1})
 entityRecipes.set("torch",{imagePath:"./Assets/Objects/torch.png",width:16,height:16,sheetInfo:[{animation:"burning",frames:3}],yOffset:0})
 entityRecipes.set("pew",{imagePath:"./Assets/Objects/pew.png",width:14,height:40,sheetInfo:[{animation:"intact",frames:1}],yOffset:4,radius:7,health:7})
 entityRecipes.set("shield",{imagePath:"./Assets/Objects/shield.png",width:32,height:64,sheetInfo:[{animation:"intact",frames:6}],yOffset:20,radius:16,health:10})
