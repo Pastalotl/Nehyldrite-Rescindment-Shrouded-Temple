@@ -435,7 +435,7 @@ let loadScreenText = [
   "Fun Fact! @The Shrouded Temple is @situated high on Mount @Feshfen's north-east @flank.",
   '"You need a permit to be @here!" @- Cptn. Wenance "Gateface" @Galhar',
   /*Gameplay*/
-  "Pressing [M] brings up @the controls!",
+  "Pressing [H] brings up @the controls!",
   "A grey targeting reticle @means that the action @cannot be used at all.",
   "A RED targeting reticle @means that the target is @out of range",
   "An ORANGE targeting reticle @means that the target is @the wrong type of target.",
