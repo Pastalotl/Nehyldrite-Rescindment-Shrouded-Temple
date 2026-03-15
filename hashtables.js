@@ -52,6 +52,7 @@ class CharacterTable extends Hashtable{
     if(x==undefined) x = 0
     if(y==undefined) y = 0
     let record = this.get(type)
+    if(record == null) return
     //console.log(record)
     //if(record.id > 7){
       //return (new Character(type,record.id,record.imagePath,0,0,0,0,record.width,record.height,record.stats,record.sheetInfo))
@@ -61,7 +62,6 @@ class CharacterTable extends Hashtable{
     record.stats,record.sheetInfo,record.meterMax,record.yOffset,record.actions,record.radius,record.resistances,x,y))
 
   }
-
 }
 
 class EntityTable extends Hashtable{
@@ -73,6 +73,7 @@ class EntityTable extends Hashtable{
     if(x==undefined) x = 0
     if(y==undefined) y = 0
     let record = this.get(type)
+    if(record == null) return
     //console.log(record)
     //if(record.id > 7){
       //return (new Character(type,record.id,record.imagePath,0,0,0,0,record.width,record.height,record.stats,record.sheetInfo))
@@ -86,7 +87,6 @@ class EntityTable extends Hashtable{
       return new Entity("obj"+String(this.currentKey),type,record.imagePath,record.width,record.height,
       record.sheetInfo,record.yOffset,x,y)
     }
-
   }
 }
 
@@ -96,7 +96,8 @@ class ActionTable extends Hashtable{
   }
   createAction(type){
     let record = this.get(type)
-    console.log(record)
+    //console.log(record)
+    if(record == null) return
     //if(record.id > 7){
       //return (new Character(type,record.id,record.imagePath,0,0,0,0,record.width,record.height,record.stats,record.sheetInfo))
     //}
@@ -106,5 +107,4 @@ class ActionTable extends Hashtable{
   record.description))
 
   }
-
 }
