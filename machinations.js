@@ -9,7 +9,7 @@ function renderLoop(){
       textHelp.writeText(`KEYBOARD CONTROLS @ @Z - Confirm / Targeting @X - Back @C - Switch Character / End Turn @1 - REST [non-combat] 
 @2 - MOVE [combat] @5 - ${menuCharacter.getActionName(0).toUpperCase()} (action 1) @6 - ${menuCharacter.getActionName(1).toUpperCase()} (action 2) 
 @7 - ${menuCharacter.getActionName(2).toUpperCase()} (action 3) @8 - ${menuCharacter.getActionName(3).toUpperCase()} (action 4) @9 - ${menuCharacter.getActionName(4).toUpperCase()} (action 5) 
-@0 - ${menuCharacter.getActionName(5).toUpperCase()} (action 6) @M - Toggle Help Menu @Arrow Keys - Movement 
+@0 - ${menuCharacter.getActionName(5).toUpperCase()} (action 6) @h - Toggle Help Menu @Arrow Keys - Movement 
 @ @Nehyldrite: Rescindment - @Shrouded Temple @Made by Pastalotl @Music by Rufus Renty`)
     }
     
