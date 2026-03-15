@@ -5,8 +5,8 @@ class Level{
     current fixed stack forces a limit on how many entities can be
     in one level.*/
     this.turnQueue = new PriorityTurnQueue(new Icon("./Assets/Icons/portraits-combat-full.png",0,0,60,-60,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
-                                                    {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2},{animation:"Automata",frames:2},{animation:"Cavro",frames:2},{animation:"Husk",frames:2},{animation:"Spectre",frames:2},
-                                                    {animation:"Warden",frames:2},{animation:"Spectre",frames:2}]),new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+    {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2},{animation:"Automata",frames:2},{animation:"Cavro",frames:2},{animation:"Husk",frames:2},{animation:"Spectre",frames:2},
+    {animation:"Warden",frames:2},{animation:"Spectre",frames:2}]),new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2}]))
     this.combat = false
   }
@@ -398,9 +398,11 @@ class Rooms{
     this.currentArea = 0
   }
   addArea(area){
+    if(area == null) return
     this.areas.push(area)
   }
   changeAreaIndex(index){
+    if(index >= this.areas.length) return
     this.stopBGM()
     this.currentArea = index
     this.playBGM()
@@ -454,7 +456,8 @@ class Rooms{
   }
     /*General Methods*/
   addObject(object,areaType){
-    if (areaType != undefined){
+    if(object == null) return
+    if (areaType != undefined && areaType != null){
       this.areas[this.locateAreaIndex(areaType)].addObject(object)
     }
     else{
