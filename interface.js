@@ -107,7 +107,9 @@ class StatBar extends Ui{
     this.barLengths = barPixels
   }
   setPercentage(decimal){
-    this.frame.col = Math.ceil(decimal * this.barLengths[this.frame.row])
+    if(decimal > 1) {decimal = 1}
+    else if(decimal < 0) {decimal = 0}
+    this.frame.col = Math.round(decimal * this.barLengths[this.frame.row])
   }
   setFrame(frame){
     this.frame.col = frame

@@ -110,7 +110,7 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
     //console.log((5-frame)/5)
     healthBar.setPercentage(menuCharacter.getHealthPercent())
     healthBar.render()
-    menuHealthValue.writeText(String(menuCharacter.getCurrentHealth())+"/"+String(menuCharacter.getMaxHealth()))
+    menuHealthValue.writeText(String(Math.round(menuCharacter.getCurrentHealth()))+"/"+String(menuCharacter.getMaxHealth()))
 
     skillBar.rowChange(lowerPortrait)
     skillBar.setFrame(menuCharacter.getMeter())
@@ -167,7 +167,7 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
 }
 let displayText = 0
 function startScreenRendering(){
-  textVersion.writeText("v0.3.8c (14/03/26)")
+  textVersion.writeText("v0.3.8c (17/03/26)")
   
 
   if(frame == 0){displayText = (displayText+1) % 7}

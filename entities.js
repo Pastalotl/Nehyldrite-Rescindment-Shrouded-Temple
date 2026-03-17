@@ -455,6 +455,7 @@ class Action extends Entity{
     }
     self.depleteAction()
     self.decreaseMeter(this.cost)
+    if(this.target.type != self && this.target.range == 0) {targetX = originX; targetY = originY}
     this.animateAction(originX,originY,targetX,targetY,meter,level,originKey)
     if(! level.isCombat()){
         setTimeout(()=>{self.restoreAction()},3000)
