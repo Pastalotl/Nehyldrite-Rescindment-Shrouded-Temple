@@ -1,5 +1,15 @@
 # Patch Notes
-The current patch is v0.3.8c from 2026-3-14 (pi day 2026)
+The current version is v0.3.8d from 2026-3-17 (pi day 2026)
+
+## v0.3.8d
+Various quick bug fixes!
+### Bug Fixes
+- The Chest assets in the temple will now load correctly
+- Updated all references to the help menu key "H"
+- Health values will no longer show as decimals
+- Health bars will more accurately display percentages
+- Actions that should target an area around the user (Cleave, Sweep) will no longer target the area around the cursor
+
 ## v0.3.8c - GitHub Release
 Hiya! This is the first GitHub release of Nehyldrite: Rescindment - Shrouded Temple (prototype 3). Today is also pi day (2026/3/14)! Below is a bunch of "fun" bits and bobs about this release/patch!
 ### Features

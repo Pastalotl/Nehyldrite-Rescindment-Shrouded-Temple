@@ -167,7 +167,7 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
 }
 let displayText = 0
 function startScreenRendering(){
-  textVersion.writeText("v0.3.8c (17/03/26)")
+  textVersion.writeText("v0.3.8d (17/03/26)")
   
 
   if(frame == 0){displayText = (displayText+1) % 7}
