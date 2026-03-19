@@ -453,8 +453,8 @@ let loadScreenText = [
   "Some actions target an @area around a point.",
   "Some actions can only be @used once. These usually @use the [0] key.",
   "Many objects in the temple @can be destroyed by @attacks!",
-  "Fun fact! @This loading screen is just @for vibes - it's unnecessary!",
-  "Some actions target the user!",
+  "Fun fact! @This loading screen is just @for vibes - it's unnecessary",
+  "Some actions target the user",
   "You cannot move between @rooms whilst in combat!",
   "Pressing [J] does...@ @ nothing.@"
 ]
