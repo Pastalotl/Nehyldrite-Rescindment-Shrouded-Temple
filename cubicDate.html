@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <title>Cubic Date Calculator</title>
+    <link rel="stylesheet" href="appearance.css">
+    <meta charset="utf-8">
+    <!-- <link rel="icon" type="image/x-icon" href="silaera portrait.png"> -->
+</head>
+
+<body class="apatite">
+
+    <img src="./banners/My Genuine.png" class="imageBanner">
+
+    <div class="banner aquamarine">
+        <img src="Silaera.png" id="bannerIcon"><h1></i><u><b>Cubic Date Calc</b></u></h1> 
+    </div>
+
+    <div class="datebox aquamarine" id="date"></div>
+
+    <div class="sidebar diamond">
+        <i><a href="./index.html">Home</href></i><br/><br/>
+        <h2><i><a href="./cubicdate.html">Cubic Date </h2>You are here</href></a></i>
+    </div>
+
+    <div class="content apatite">
+        <h3>What's the equation below the title?</h3>
+        <p>That's the "<b>cubic date</b>"! It's just a cubic equation with roots that form the date (in dd/mm/yy form) when subject to the inequalities. 
+        It's an overly complicated and gimmicky format, but it's only for fun - so it's unimportant. The format and inequalities likely give away that the roots are equal to the date.</p>
+        <p>To find the cubic date format for any (valid) day you'd like, you can enter it down into the date input below!</p>
+    </div>
+
+    <div class="content emerald">
+        <h2>La Calculadora</h2>
+        <p id="answers">
+          Please insert date or select payment type!
+        </p>
+          <input type="date" id="cubicInput"></input>
+          <button type="submit" onclick="
+            date = document.getElementById('cubicInput').value;
+            day = parseInt(date.slice(-2));
+            month = parseInt(date.slice(5,7));
+            year = parseInt(date.slice(0,4));
+              console.log(day,month,year)
+              document.getElementById('answers').innerHTML = dateToCubic(day,month,year);
+              ">Calc it!</button>
+    </div>
+
+        <script src="cubicDate.js"></script>
+    </body>
+
+</html>
