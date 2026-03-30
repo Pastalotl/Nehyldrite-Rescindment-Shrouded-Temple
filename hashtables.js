@@ -59,7 +59,7 @@ class CharacterTable extends Hashtable{
     //}
     this.currentKey++
     return (new Character("cha"+String(this.currentKey),type,record.id,record.imagePath,record.width,record.height,
-    record.stats,record.sheetInfo,record.meterMax,record.yOffset,record.actions,record.radius,record.resistances,x,y))
+    record.stats,record.sheetInfo,record.meterMax,record.yOffset,record.actions,record.radius,record.resistances,record.allegiance,x,y))
 
   }
 }

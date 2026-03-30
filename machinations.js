@@ -6,11 +6,11 @@ function renderLoop(){
     frame = (frame+1)%5
     ctx.clearRect(0,0,canvas.width,canvas.height) /*clear the canvas*/
     if(helpMenu){
-      textHelp.writeText(`KEYBOARD CONTROLS @ @Z - Confirm / Targeting @X - Back @C - Switch Character / End Turn @1 - REST [non-combat] 
-@2 - MOVE [combat] @5 - ${menuCharacter.getActionName(0).toUpperCase()} (action 1) @6 - ${menuCharacter.getActionName(1).toUpperCase()} (action 2) 
-@7 - ${menuCharacter.getActionName(2).toUpperCase()} (action 3) @8 - ${menuCharacter.getActionName(3).toUpperCase()} (action 4) @9 - ${menuCharacter.getActionName(4).toUpperCase()} (action 5) 
-@0 - ${menuCharacter.getActionName(5).toUpperCase()} (action 6) @H - Toggle Help Menu @Arrow Keys - Movement 
-@ @Nehyldrite: Rescindment - @Shrouded Temple @Made by Pastalotl @Music by Rufus Renty`)
+      textHelp.writeText(`KEYBOARD CONTROLS | |Z - Confirm / Targeting |X - Back |C - Switch Character / End Turn |1 - REST [non-combat] 
+|2 - MOVE [combat] |5 - ${menuCharacter.getActionName(0).toUpperCase()} (action 1) |6 - ${menuCharacter.getActionName(1).toUpperCase()} (action 2) 
+|7 - ${menuCharacter.getActionName(2).toUpperCase()} (action 3) |8 - ${menuCharacter.getActionName(3).toUpperCase()} (action 4) |9 - ${menuCharacter.getActionName(4).toUpperCase()} (action 5) 
+|0 - ${menuCharacter.getActionName(5).toUpperCase()} (action 6) |H - Toggle Help Menu |Arrow Keys - Movement 
+| |Nehyldrite: Rescindment - |Shrouded Temple |Made by Pastalotl |Music by Rufus Renty`)
     }
     
     else{
@@ -65,7 +65,7 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
   //console.log(temple)
     temple.renderTurnOrder()
     
-    turnOrderText.writeText(`${temple.peek().getType()} @(${temple.peek().getKey()}) @#${temple.getPriority()}`)
+    turnOrderText.writeText(`${temple.peek().getType()} [${temple.peek().getAllegiance().toUpperCase()}]|(${temple.peek().getKey()}) |turn:${temple.getPriority()}`)
 
     /*Menu (left):*/
     menu.animationChange("common-default")
@@ -90,8 +90,8 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
       }
 
     }
-    menuCharacter = temple.peek().getId()<7?temple.peek():menuCharacter
-    let lowerPortrait = temple.peek().getId()<7?temple.peek().getId():defaultPortrait
+    menuCharacter = temple.peek().isPlayable()?temple.peek():menuCharacter
+    let lowerPortrait = temple.peek().isPlayable()?temple.peek().getId():defaultPortrait
     defaultPortrait = lowerPortrait
     //console.log(defaultPortrait)
 
@@ -167,7 +167,7 @@ function interfaceRendering(){ /*draws all the non-world elements such as menus 
 }
 let displayText = 0
 function startScreenRendering(){
-  textVersion.writeText("v0.3.8d (17/03/26)")
+  textVersion.writeText("v0.3.8e (30/03/26)")
   
 
   if(frame == 0){displayText = (displayText+1) % 7}
@@ -176,13 +176,13 @@ function startScreenRendering(){
     textStartPrompt.writeText("Press [SPACE]")
   }
   else if (! started && playerSelections.length == 3){
-    textStartPrompt.writeText("[SPACE] to DESCEND")
+    textStartPrompt.writeText("[SPACE] to DESCEND |number keys to change")
   }
   else if(! started){
-    textStartPrompt.writeText("SELECT x3 with @number keys")
+    textStartPrompt.writeText("SELECT x3 with |number keys")
   }
   else{
-    textStartPrompt.writeText(`LOADING... @${newAreaName}`)
+    textStartPrompt.writeText(`LOADING... |${temple.getNewRoomType()}`)
   }
   }
   if(started){

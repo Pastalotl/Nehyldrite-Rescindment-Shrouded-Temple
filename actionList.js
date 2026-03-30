@@ -94,7 +94,7 @@ actionList.set("Assess",{imagePath:"./Assets/Effects/nehyldrite.png",width:32,he
   sheetInfo:[{animation:"swing-r",frames:3},{animation:"swing-l",frames:3},{animation:"proj-r",frames:4},{animation:"proj-l",frames:4},{animation:"impact",frames:4}],cost:0,stat:"const",
   multiplier:0,constant:0,damageType:"unity",targetType:"area",range:0,effectRadius:96,
   selfEffect:"nehyldUsed",targetEffect:"assessed",movement:0,speed:2,animationType:"self",
-  description:"FInd weaknesses in an area; 1x"})
+  description:"Find weaknesses in an area; 1x"})
 
 
 /*Ifforrem*/
@@ -144,7 +144,7 @@ actionList.set("SmartStrike",{imagePath:"./Assets/Effects/lumi-melee.png",width:
 
 actionList.set("Automata",{imagePath:"./Assets/Effects/spawn.png",width:32,height:32,
   sheetInfo:[{animation:"target",frames:5}],cost:3,stat:"const",
-  multiplier:0,constant:0,damageType:"lumi",targetType:"point",range:32,effectRadius:0,
+  multiplier:0,constant:0,damageType:"lumi",targetType:"point",range:64,effectRadius:0,
   selfEffect:null,targetEffect:"spawnAutomata",movement:0,speed:0,animationType:"target",
   description:"Deploy a mechanical ally"})
 

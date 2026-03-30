@@ -121,6 +121,8 @@ class Textbox extends Ui{
     super(imagePath,row,column,x,y,width,height,sheetInfo)
     this.boundary = boundary
     this.columns = sheetInfo[0]
+    this.spacing = 1
+    this.returnCharacter = 64
   }
   inBounds(xCheck,yCheck){   
   if(
@@ -132,18 +134,20 @@ class Textbox extends Ui{
   return false
   }
   writeText(sentence){
-    let spacing = 1
+    let spacing = this.spacing
     //console.log("Begin write")
     let totalLength = sentence.length
-    this.updatePosition(this.boundary.xMin - spacing, this.boundary.yMax - spacing)
+    this.updatePosition(this.boundary.xMin - spacing, this.boundary.yMax - 1)
     //console.log(totalLength)
     for(let n=0;n<totalLength;n++){
-      if(sentence.charCodeAt(n)==64){ /*@ symbol = line break*/
+      if(sentence.charCodeAt(n)==this.returnCharacter){ /*@ symbol = line break*/
         n++
-        if(this.inBounds(this.boundary.xMin + spacing, this.position.y - this.frame.height - spacing)){
+        if(this.inBounds(this.boundary.xMin + 1, this.position.y - this.frame.height - spacing)){
+          //console.log("line break")
           this.updatePosition(this.boundary.xMin - spacing, this.position.y - this.frame.height - spacing)
         }
         else{
+          console.log("string overflow")
           return "string overflow"
         }
       }
@@ -162,6 +166,7 @@ class Textbox extends Ui{
       }
       else{
         //console.log(this.boundary.xMin - spacing, this.position.y - this.frame.height - spacing)
+        console.log("string overflow")
         return "string overflow"
       }
       //console.log("final step!",this.position.x,this.position.y)
@@ -170,4 +175,17 @@ class Textbox extends Ui{
     //console.log("text written")
   }
 
+}
+class TypesetTextbox extends Textbox{
+  constructor(font,boundary){
+    if(font == "nehyld-outline"){
+      super("./Assets/Icons/typeset-nehyld-outline.png",0,0,0,0,7,9,[14,14,14,14,14,14,14,12],boundary)
+      this.spacing = -1
+      this.returnCharacter = "|".charCodeAt(0)
+      console.log(this.returnCharacter)
+    }
+    else{
+      super("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],boundary)
+    }
+  }
 }

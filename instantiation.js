@@ -118,8 +118,8 @@ temple.addArea(crypt)
 /*table creation*/
 
 
-//Nigelas = charRecipes.createCharacter("Nigelas")
-//Nigelas.updatePosition(-48,0)
+//Nigel@s = charRecipes.createCharacter("Nigel@s")
+//Nigel@s.updatePosition(-48,0)
 
 //Kauplaire = charRecipes.createCharacter("Kauplaire")
 //Kauplaire.updatePosition(-64,16)
@@ -164,19 +164,19 @@ ctx.clearRect(0,0,canvas.width,canvas.height) /*clear the canvas*/
 
 /*Icons*/
 /*
-portraits = new Icon("./Assets/Icons/portraits-combat-full.png",0,0,60,-60,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+portraits = new Icon("./Assets/Icons/portraits-combat-full.png",0,0,60,-60,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2},{animation:"Automata",frames:2},{animation:"Cavro",frames:2},{animation:"Husk",frames:2},{animation:"Spectre",frames:2},
   {animation:"Warden",frames:2},{animation:"Spectre",frames:2}])
 */
-menu = new Icon("./Assets/Icons/player-actions-double.png",3,0,-60,-60,24,24,[{animation:"Nigelas-default",frames:6},{animation:"Nigelas-select",frames:6},{animation:"Kauplaire-default",frames:6},{animation:"Kauplaire-select",frames:6},
+menu = new Icon("./Assets/Icons/player-actions-double.png",3,0,-60,-60,24,24,[{animation:"Nigel@s-default",frames:6},{animation:"Nigel@s-select",frames:6},{animation:"Kauplaire-default",frames:6},{animation:"Kauplaire-select",frames:6},
   {animation:"Ifforrem-default",frames:6},{animation:"Ifforrem-select",frames:6},{animation:"Calian-default",frames:6},{animation:"Calian-select",frames:6},
   {animation:"Ddwgyl-default",frames:6},{animation:"Ddwgyl-select",frames:6},{animation:"Vayens-default",frames:6},{animation:"Vayens-select",frames:6},
   {animation:"Silaera-default",frames:6},{animation:"Silaera-select",frames:6},{animation:"common-default",frames:2},{animation:"common-select",frames:2}])
 
-lowerIcon = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+lowerIcon = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2}])
 
-chaSelectMenu = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+chaSelectMenu = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2}])
 
 reticle = new Icon("./Assets/Icons/reticle.png",0,0,0,0,16,16,[{animation:"reticle",frames:5}])
@@ -187,19 +187,19 @@ costBar = new StatBar("./Assets/Icons/meters-skill.png",0,20,142,-43,32,13,[4,4,
 moveBar = new StatBar("./Assets/Icons/meters-movement.png",0,20,-140,-70,24,24,[21],[20])
 
 /*text boxes*/
-turnOrderText = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-160,xMax:100,yMin:-20,yMax:43})
-menuHealthValue = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-94,xMax:100,yMin:-90,yMax:-79})
-actionName = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-36,xMax:44,yMin:-51,yMax:-44})
-actionDescription = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-36,xMax:160,yMin:-67,yMax:-52})
-textDamage = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:44,xMax:94,yMin:-51,yMax:-44})
-textCost = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:94,xMax:160,yMin:-51,yMax:-44})
-textHelp = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-100,xMax:100,yMin:-80,yMax:80})
-promptHelp = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-160,xMax:-50,yMin:-67,yMax:-52})
-textVersion = new  Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-160,xMax:-50,yMin:50,yMax:85})
-textStartPrompt = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:20,xMax:160,yMin:-95,yMax:-72})
-loadScreenTextbox = new Textbox("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],{xMin:-20,xMax:150,yMin:-72,yMax:-24})
+turnOrderText = new TypesetTextbox("nehyld-outline",{xMin:-160,xMax:100,yMin:-20,yMax:43})
+menuHealthValue = new TypesetTextbox("nehyld-outline",{xMin:-94,xMax:100,yMin:-90,yMax:-79})
+actionName = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:44,yMin:-51,yMax:-44})
+actionDescription = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:160,yMin:-67,yMax:-52})
+textDamage = new TypesetTextbox("nehyld-outline",{xMin:44,xMax:94,yMin:-51,yMax:-44})
+textCost = new TypesetTextbox("nehyld-outline",{xMin:94,xMax:160,yMin:-51,yMax:-44})
+textHelp = new TypesetTextbox("nehyld-outline",{xMin:-100,xMax:100,yMin:-80,yMax:80})
+promptHelp = new TypesetTextbox("nehyld-outline",{xMin:-160,xMax:-50,yMin:-67,yMax:-52})
+textVersion = new  TypesetTextbox("nehyld-outline",{xMin:-160,xMax:-50,yMin:50,yMax:85})
+textStartPrompt = new TypesetTextbox("nehyld-outline",{xMin:20,xMax:160,yMin:-95,yMax:-72})
+loadScreenTextbox = new TypesetTextbox("nehyld-outline",{xMin:-20,xMax:150,yMin:-72,yMax:-24})
 /*currentLevel = new Level()
-currentLevel.addObject(Nigelas)
+currentLevel.addObject(Nigel@s)
 currentLevel.addObject(Kauplaire)
 currentLevel.addObject(Ifforrem)
 currentLevel.addObject(Calian)
@@ -221,7 +221,7 @@ console.log(currentLevel)
 */
 //temple.addObject(charRecipes.createCharacter("Automata"),"start screen")
 /*
-temple.addObject(Nigelas,"vestibule")
+temple.addObject(Nigel@s,"vestibule")
 temple.addObject(Kauplaire,"vestibule")
 temple.addObject(Ifforrem,"nave")
 temple.addObject(Calian,"vestibule")
@@ -375,7 +375,7 @@ temple.addObject(new mapEntity("e69","pot","./Assets/Objects/Pot-small.png",0,0,
 */
 /*
 turnOrder = new TurnQueue(20)
-turnOrder.enqueue(Nigelas)
+turnOrder.enqueue(Nigel@s)
 turnOrder.enqueue(Warden)
 turnOrder.enqueue(Ddwgyl)
 turnOrder.enqueue(Husk)
@@ -393,72 +393,87 @@ turnOrder.enqueue(Cultist_B)
 
 let loadScreenIndex = 0
 let loadScreenText = [
-  /*Nigelas*/
-  "LORE: @Nigelas' fez travelled @through time and space! @Fun-er Fact! @Fezzes are cool!",
-  "TRIVIA: @Nigelas is left-handed!",
-  "LORE: @Nigelas is a viking warrior!",
+  /*Nigel@s*/
+  "LORE: |Nigel@s' fez travelled |through time and space! |Fun-er Fact! |Fezzes are cool!",
+  "TRIVIA: |Nigel@s is left-handed!",
+  "LORE: |Nigel@s is a viking warrior!",
+  "TRIVIA: |Nigel@s' full name is:|Nigel@s av Derp!",
   /*Kauplaire*/
-  "TRIVIA: @Kauplaire is ambidexterous @and that's with 4 limbs!",
-  "LORE: @Kauplaire used to be @an actor. They were @very popular back home.",
-  "LORE: @Kauplaire is an Ulekiis - @they are an arachnid @species from Cielanorfe!",
+  "TRIVIA: |Kauplaire is ambidexterous |and that's with 4 limbs!",
+  "LORE: |Kauplaire used to be |an actor. They were |very popular back home.",
+  "LORE: |Kauplaire is an Ulekiis - |they are an arachnid |species from Cielanorfe!",
+  "TRIVIA: |Kauplaire's full name is:|Kauplaire Deliarr!",
   /*Ifforrem*/
-  "TRIVIA: @Ifforrem's armour is @undented!",
-  "Did you know? @Ifforrem is known to eat...@rocks! This is... @*concerning!*",
-  "Fun Fact! @Ifforrem has many fun facts!@(Fun Fact provided by @Ifforrem)",
-  "LORE: @Ifforrem is a Merrep - @they are a mammal @species from Deruya!",
+  "TRIVIA: |Ifforrem's armour is |undented!",
+  "Did you know? |Ifforrem is known to eat...|rocks! This is... |*concerning!*",
+  "Fun Fact! |Ifforrem has many fun facts!|(Fun Fact provided by |Ifforrem)",
+  "LORE: |Ifforrem is a Merrep - |they are a mammal |species from Deruya!",
+  "TRIVIA: |Ifforrem has no last|name!",
   /*Calian*/
-  "TRIVIA: @Calian's full name is @Dr. Calian Zariastas",
-  "Fun Fact! @Calian is tired...",
-  "LORE: @Calian used to be a human. @He now appears as an @Alinno - an avian species @from Deruya!",
+  "TRIVIA: |Calian's full name is |Dr. Calian Zariastas",
+  "Fun Fact! |Calian is tired...",
+  "LORE: |Calian used to be a human. |He now appears as an |Alinno - an avian species |from Deruya!",
+  "TRIVIA: |Calian's design is based|off a Papuan Frogmouth,| not an owl! ",
+  "TRIVIA: |Calian's full name is:|Dr Calian Zariastas!",
   /*Ddwgyl*/
-  "TRIVIA: @Ddwgyl's trident is called @'Kydlyfyad', which is @Llaryan for 'confluence'!",
-  "TRIVIA: @Ddwgyl is pronounced: @THOO-gul",
-  "Fun Fact! @Ddwgyl has fun rock facts!",
-  "LORE: @Ddwgyl is a Llotelyon - @they are an amphibian @species from Deruya!",
+  "TRIVIA: |Ddwgyl's trident is called |'Kydlyfyad', which is |Llaryan for 'confluence'!",
+  "TRIVIA: |Ddwgyl is pronounced: |THOO-gul",
+  "Fun Fact! |Ddwgyl has fun rock facts!",
+  "LORE: |Ddwgyl is a Llotelyon - |they are an amphibian |species from Deruya!",
+  "TRIVIA: |Ddwgyl's full name is:|Ddwgyl Kaeffep!",
   /*Vayens*/
-  '"Gaslight, Gatekeep, @Girlboss" @- Vayens the Righteous @(probably)',
-  "TRIVIA: @Vayens' blades are known as @'The Blades of Shalingaire'",
-  "LORE: @Vayens used to be a military commander!",
-  "LORE: @Vayens is a Raunaegis - @they are a archosaur @species from Cielanorfe!",
+  '"Gaslight, Gatekeep, |Girlboss" |- Vayens the Righteous |(probably)',
+  "TRIVIA: |Vayens' blades are known as |'The Blades of Shalingaire'",
+  "LORE: |Vayens used to be a military commander!",
+  "LORE: |Vayens is a Raunaegis - |they are a archosaur |species from Cielanorfe!",
+  "TRIVIA: |Vayens has the title:| 'The Righteous'!",
   /*Silaera*/
-  "LORE: @Silaera mentally projects @herself into the temple! @She's actually very far away",
-  "Silaera is a trans icon! @We  Silaera!",
-  "LORE: @Silaera is a Tonlen - @they are a species @resembling snakes with @innate psychic powers.",
+  "LORE: |Silaera mentally projects |herself into the temple! |She's actually very far away",
+  "Silaera is a trans icon! |We  Silaera!",
+  "LORE: |Silaera is a Tonlen - |they are a species |resembling snakes with |innate psychic powers.",
+  "LORE: |Silaera is a duchess!|You can call her:|Duchess Silaera!",
   /*Enemies*/
-  "Did you know? @Cavroes have strong @maternal instincts.",
-  "Fun Fact! @All husks in the Temple @were humans.",
-  "Did you know? @Spectres are vengeful @spirits trapped by @their own rage.",
-  "Fun Fact! @The temple's wardens are @known to hardly move when @standing guard!",
-  "Fun Fact! @Cultists weave shadow into @their spells and rituals.",
+  "Did you know? |Cavros have strong |maternal instincts.",
+  "Fun Fact! |All husks in the Temple |were humans.",
+  "Did you know? |Spectres are vengeful |spirits trapped by |their own rage.",
+  "Fun Fact! |The temple's wardens are |known to hardly move when |standing guard!",
+  "Fun Fact! |Cultists weave shadow into |their spells and rituals.",
   /*Clestuard*/
   "Are YOU getting Shrouded in the Temple?",
-  "Fun Fact! @The Shrouded Temple is @situated high on Mount @Feshfen's north-east @flank.",
-  '"You need a permit to be @here!" @- Cptn. Wenance "Gateface" @Galhar',
+  "Fun Fact! |The Shrouded Temple is |situated high on Mount |Feshfen's north-east |flank.",
+  '"You need a permit to be |here!" |- Cptn. Wenance "Gateface" |Galhar',
   /*Gameplay*/
-  "Pressing [H] brings up @the controls!",
-  "A grey targeting reticle @means that the action @cannot be used at all.",
-  "A RED targeting reticle @means that the target is @out of range",
-  "An ORANGE targeting reticle @means that the target is @the wrong type of target.",
-  "A YELLOW targeting reticle @means that the target is @not in line of sight.",
-  "A GREEN targeting reticle @means that an action can @be used on the target!",
-  "Some actions have a cost @which is displayed above @their description.",
-  "Actions have a speed value @which can affect when a @character gets their next @turn.",
-  "Characters with a higher @agility stat, get their @next turn quicker!",
-  "RED actions deal weapon @damage to a target.",
-  "YELLOW actions apply @effects to a target.",
-  "GREEN actions heal a @target.",
-  "BLUE actions defend a @target.",
-  "PURPLE actions are spells. @They often deal damage, @or have other effects.",
-  "BROWN actions move the @user across the map.",
-  "Some actions target an @area around a point.",
-  "Some actions can only be @used once. These usually @use the [0] key.",
-  "Many objects in the temple @can be destroyed by @attacks!",
-  "Fun fact! @This loading screen is just @for vibes - it's unnecessary",
+  "Pressing [H] brings up |the controls!",
+  "A grey targeting reticle |means that the action |cannot be used at all.",
+  "A RED targeting reticle |means that the target is |out of range",
+  "An ORANGE targeting reticle |means that the target is |the wrong type of target.",
+  "A YELLOW targeting reticle |means that the target is |not in line of sight.",
+  "A GREEN targeting reticle |means that an action can |be used on the target!",
+  "Some actions have a cost |which is displayed above |their description.",
+  "Actions have a speed value |which can affect when a |character gets their next |turn.",
+  "Characters with a higher |agility stat, get their |next turn quicker!",
+  "RED actions deal weapon |damage to a target.",
+  "YELLOW actions apply |effects to a target.",
+  "GREEN actions heal a |target.",
+  "BLUE actions defend a |target.",
+  "PURPLE actions are spells. |They often deal damage, |or have other effects.",
+  "BROWN actions move the |user across the map.",
+  "Some actions target an |area around a point.",
+  "Some actions can only be |used once. These usually |use the [0] key.",
+  "Many objects in the temple |can be destroyed by |attacks!",
+  "Fun fact! |This loading screen is just |for vibes - it's unnecessary",
   "Some actions target the user",
-  "You cannot move between @rooms whilst in combat!",
-  "Pressing [J] does...@ @ nothing.@"
+  "You cannot move between |rooms whilst in combat!",
+  "Pressing [J] does...| | nothing.|"
 ]
-console.log(loadScreenText.length)
+/*1: allied - will help this allegiance
+0: neutral - will not help or attack allegiance
+-1: hostile - will attack this allegiance*/
+let allegiances = {party:{party:1,allies:1,cavros:-1,cult:-1},
+              allies:{party:1,allies:1,cavros:-1,cult:-1},
+              cavros:{party:-1,allies:-1,cavros:1,cult:0},
+              cult:{party:-1,allies:-1,cavros:0,cult:1}
+            }
 
 let framesPms = 33 /*frames per millisecond*/
 let helpMenu = false

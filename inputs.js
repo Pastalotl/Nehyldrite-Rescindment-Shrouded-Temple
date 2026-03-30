@@ -4,7 +4,7 @@ let startSelectMenu = false
 let playerMovement = 0
 let started = false
 let newAreaName = ""
-const playerChaNames = ["Nigelas","Kauplaire","Ifforrem","Calian","Ddwgyl","Vayens","Silaera"]
+const playerChaNames = ["Nigel@s","Kauplaire","Ifforrem","Calian","Ddwgyl","Vayens","Silaera"]
 let playerSelections = []
 //const movementKeys = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"]
 let keysPressed = {ArrowUp:false,ArrowDown:false,ArrowLeft:false,ArrowRight:false}
@@ -135,7 +135,7 @@ function movePlayer(){
     vector.y -= Math.round(0.5 * (components > 1 ? Math.round(Math.sqrt(2)/2 * speed) : speed)) // /2
   }
   
-  if (temple.peek().getId()<7 &&
+  if (temple.peek().isPlayable() &&
      !targeting &&
      temple.radiusUnobstructed(temple.peek().getPosition().x+vector.x, temple.peek().getPosition().y+vector.y, temple.peek().getRadius(), temple.peek().getKey()) ){
 
@@ -149,16 +149,18 @@ function movePlayer(){
     //cam.x = temple.peek().getPosition().x
     //cam.y = temple.peek().getPositionCentre().y
   }
-  else if ((temple.peek().getId()>6||targeting)){
-    if(temple.inBounds(cam.x+vector.x,cam.y+vector.y) === true){
+  else if ((!temple.peek().isPlayable()||targeting)){
+    //if(temple.inBounds(cam.x+vector.x,cam.y+vector.y) === true){
+    //console.log("CURSOR")
+    if(temple.cursorInBounds(cam.x+vector.x,cam.y+vector.y,36)){
     cam.x += vector.x
     cam.y += vector.y
     
     }
-    else if(!temple.inBounds(cam.x,cam.y)){
-      cam.x = temple.peek().getPosition().x
-      cam.y = temple.peek().getPosition().y
-    }
+    //else if(!temple.inBounds(cam.x,cam.y)){
+      //cam.x = temple.peek().getPosition().x
+      //cam.y = temple.peek().getPosition().y
+    //}
   }
     /*you can go really fast diagonally if you punch both arrow keys quickly, NO IDEA WHY*/
   //if(temple.peek().id<7){
@@ -177,7 +179,7 @@ function debug(event){
     alternate = (alternate+1)%2
     cam.x = temple.peek().getPosition().x
     cam.y = temple.peek().getPositionCentre().y
-    if(temple.peek().getId()<7){
+    if(! temple.peek().isPlayable()){
       demoAction = {name:"",desc:"",cost:0}
       actionNum = -1
     }
@@ -206,38 +208,6 @@ function debug(event){
       temple.playBGM()
 
     }
-  }
-  if(event.code == "Numpad0"){
-    temple.stopBGM();
-    spellPsychic.currentTime = 0
-    spellPsychic.play()
-    targeting = true
-    cam.x = 0
-    cam.y = 0
-    currentAreaType = temple.getAreaType()
-    temple.changeArea("start screen")
-
-    if(currentAreaType != "nave"){
-      newAreaName = "floor -1: nave"
-      setTimeout(() => {
-      temple.stopBGM();
-      temple.changeArea("nave")
-      temple.playBGM();
-      cam.x = temple.peek().getPosition().x; cam.y = temple.peek().getPositionCentre().y;
-      targeting = false
-    }, 1515)
-    }
-    else{
-      newAreaName = "floor 0: vestibule"
-    setTimeout(() => {
-      temple.stopBGM();
-      temple.changeArea("vestibule");
-      temple.playBGM();
-      cam.x = temple.peek().getPosition().x; cam.y = temple.peek().getPositionCentre().y;
-      targeting = false
-    }, 1515)
-    }
-    
   }
 }
 
@@ -285,7 +255,7 @@ function chaAction(event){
 }
 
 function userAction(event){
-  if(event.code == "KeyC"&&temple.peek().getId()<7){
+  if(event.code == "KeyC"&&temple.peek().isPlayable()){
     charSwap.currentTime = 0
     charSwap.play()
     temple.endTurn()
@@ -295,7 +265,7 @@ function userAction(event){
     actionNum = -1
     targeting = false
   }
-  if(event.code == "KeyZ"&&temple.peek().getId()<7&&actionNum>-1){
+  if(event.code == "KeyZ"&&temple.peek().isPlayable()&&actionNum>-1){
     if(actionNum==6){
       if(temple.isCombat()) return
       let level = temple.getCurrentLevel()

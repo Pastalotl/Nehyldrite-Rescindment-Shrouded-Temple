@@ -167,7 +167,7 @@ class mapEntity extends Entity{
 
 class Character extends mapEntity{
 
-  constructor(key,type,typeID,imagePath,width,height,stats,sheetInfo,meterMax,yOffset,actions,radius,resistances,x,y){
+  constructor(key,type,typeID,imagePath,width,height,stats,sheetInfo,meterMax,yOffset,actions,radius,resistances,allegiance,x,y){
     super(key,type,imagePath,width,height,sheetInfo,yOffset,radius,0,x,y)
     this.stats = {str:stats[0],agl:stats[1],vit:stats[2],int:stats[3],spt:stats[4]}
     this.health  = this.getMaxHealth()
@@ -178,6 +178,7 @@ class Character extends mapEntity{
     this.actions = actions
     this.effects = []
     this.resistances = resistances
+    this.allegiance = allegiance
   }
 
   /*GETTING AND CALCULATING*/
@@ -207,6 +208,12 @@ class Character extends mapEntity{
   }
   getStats(){
     return this.stats
+  }
+  getAllegiance(){
+    return this.allegiance
+  }
+  isPlayable(){
+    return this.allegiance=="party"
   }
 
 
@@ -382,13 +389,35 @@ class Action extends Entity{
     return true
   }
   targetTypeValid(targetX,targetY,level,originKey){
+    let n = level.getObjectCount()-1
+    let objects = level.getObjects()
     this.areaTargets = []
-    if(this.target.type == "point" || this.target.type == "area" || this.target.type == "self"){
+    if(this.effects.movement > 0){
+      for(n;n>-1; n--){
+      let entity = objects[n]
+      if(entity.getKey() == originKey){
+        if(level.radiusUnobstructed(targetX,targetY,entity.getRadius(),originKey)){
+          this.currentTarget = undefined
+          //console.log(`targeting ${this.currentTarget} <3`)
+          return true
+        }
+        else return false
+      }
+    }
+  }
+    else if(this.effects.target != undefined){
+        if(this.effects.target.slice(0,5) == "spawn"){
+          if(level.radiusUnobstructed(targetX,targetY,16,"fem858")){
+            this.currentTarget = undefined
+            return true
+          }
+          else return false
+        }
+    }
+    else if(this.target.type == "point" || this.target.type == "area" || this.target.type == "self"){
       this.currentTarget = undefined
       return true
     }
-    let n = level.getObjectCount()-1
-    let objects = level.getObjects()
     for(n;n>-1; n--){
       let entity = objects[n]
       if(entity.getKey() != originKey){

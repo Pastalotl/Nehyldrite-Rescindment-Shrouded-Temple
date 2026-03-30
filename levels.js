@@ -15,7 +15,7 @@ class Level{
   addObject(object){
     this.objects.push(object)
     if(object.getKey().slice(0,3)=="cha"){
-      if(object.getId()<7||this.combat){
+      if(object.isPlayable()||this.combat){
         this.turnQueue.enqueueCharacter(object)
       }
     }
@@ -142,7 +142,7 @@ class Level{
 
         if(this.objects[n].getKey().slice(0,3)=="cha"){
 
-          if(this.objects[n].getId()<7){
+          if(this.objects[n].isPlayable()){
 
             this.turnQueue.enqueueCharacter(this.objects[n])
           }
@@ -218,28 +218,41 @@ class Area extends Level{
     let xMax = false
     let yMin = false
     let yMax = false
+    let leftCheck = xCheck - radius
+    let rightCheck = xCheck + radius
+    let bottomCheck = yCheck - 0.5 * radius
+    let topCheck = yCheck + 0.5 * radius
     for(region;region>-1;region--){
-      //console.log(region,xCheck,yCheck,this.boundaries[region],(this.boundaries[region].xMin<=xCheck<=this.boundaries[region].xMax),(this.boundaries[region].yMin<=yCheck<=this.boundaries[region].yMax))
+      //console.log(`(${xCheck},${yCheck}) with radius ${radius} \n centre:${centre}, xMin:${xMin}, xMax:${xMax}, yMin:${yMin}, yMax:${yMax}`)
       if((this.boundaries[region].xMin<=xCheck&& xCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck&& yCheck<=this.boundaries[region].yMax)){
         centre = true}
       //else{return false}
-      if((this.boundaries[region].xMin<=xCheck-radius&& xCheck-radius<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck&& yCheck<=this.boundaries[region].yMax)){
-        xMin = true
+      if((this.boundaries[region].xMin<=leftCheck&& leftCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck&& yCheck<=this.boundaries[region].yMax)){ /*left*/
+        xMin = true  
       }
-      if((this.boundaries[region].xMin<=xCheck+radius&& xCheck+radius<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck&& yCheck<=this.boundaries[region].yMax)){
+      if((this.boundaries[region].xMin<=rightCheck&& rightCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck&& yCheck<=this.boundaries[region].yMax)){ /*right*/
         xMax = true
       }
-      if((this.boundaries[region].xMin<=xCheck&& xCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck-0.5*radius&& yCheck-0.5*radius<=this.boundaries[region].yMax)){
+      if((this.boundaries[region].xMin<=xCheck&& xCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=bottomCheck&& bottomCheck<=this.boundaries[region].yMax)){ /*bottom*/
         yMin = true
       }
-      if((this.boundaries[region].xMin<=xCheck&& xCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=yCheck+0.5*radius&& yCheck+0.5*radius<=this.boundaries[region].yMax)){
-        yMax = true
+      if((this.boundaries[region].xMin<=xCheck&& xCheck<=this.boundaries[region].xMax)&& (this.boundaries[region].yMin<=topCheck&& topCheck<=this.boundaries[region].yMax)){ /*top*/
+        yMax = true 
       }
       
     }
+    //console.log(`(${xCheck},${yCheck}) with radius ${radius} \n centre:${centre} (${xCheck},${yCheck}), left:${xMin} (${leftCheck},${yCheck}), right:${xMax} (${rightCheck},${yCheck}), bottom:${yMin} (${xCheck},${bottomCheck}), top:${yMax} (${xCheck},${topCheck})`)
+
     if(centre && xMin && xMax && yMin && yMax){return true}
     //if out of bounds
     else{return false}
+  }
+  cursorInBounds(xCheck,yCheck,allowance){
+    //console.log(`(${xCheck},${yCheck}) with an allowance of ${allowance}`)
+    if(this.inBounds(xCheck,yCheck)||this.inBounds(xCheck,yCheck-allowance)){
+      return true
+    }
+    return false
   }
   radiusUnobstructed(xCheck,yCheck,radius,originKey){
     if(! this.radiusInBounds(xCheck,yCheck,radius)) return false
@@ -332,7 +345,7 @@ class Area extends Level{
       let character = this.softDequeue()
       console.log(character.getKey().slice(0,3),character.getId())
       if(character.getKey().slice(0,3)=="cha"){
-        if(character.getId() < 7){
+        if(character.isPlayable()){
           playerCharacters.push(character)
         }
       }
@@ -396,6 +409,7 @@ class Rooms{
   constructor(){
     this.areas = []
     this.currentArea = 0
+    this.newRoom = ""
   }
   addArea(area){
     if(area == null) return
@@ -451,6 +465,9 @@ class Rooms{
   radiusInBounds(xCheck,yCheck,radius){
     return this.areas[this.currentArea].radiusInBounds(xCheck,yCheck,radius)
   }
+  cursorInBounds(xCheck,yCheck,allowance){
+    return this.areas[this.currentArea].cursorInBounds(xCheck,yCheck,allowance)
+  }
   radiusUnobstructed(xCheck,yCheck,radius,originKey){
     return this.areas[this.currentArea].radiusUnobstructed(xCheck,yCheck,radius,originKey)
   }
@@ -499,10 +516,14 @@ class Rooms{
   getObjectCount(){
     return this.areas[this.currentArea].getObjectCount()
   }
+  getNewRoomType(){
+    return this.newRoom
+  }
   loadCheck(xCheck,yCheck,id){
     if(this.isCombat()){return false}
     let newRoom = this.areas[this.currentArea].inLoadZone(xCheck,yCheck,id)
     if(newRoom == undefined){return false}
+    this.newRoom = newRoom
     let playerCharacters = this.areas[this.currentArea].prepRoom()
     let previousRoom = this.getAreaType()
     let previousRoomIndex = this.currentArea
