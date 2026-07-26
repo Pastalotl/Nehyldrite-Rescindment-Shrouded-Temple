@@ -1,10 +1,10 @@
 class Stack{
-  constructor(size){
+  constructor(){
     this.pointer = -1
-    this.data = new Array(size)
+    this.data = []
   }
   push(data){
-    if(this.pointer===this.data.length-1){return false}
+    //if(this.pointer===this.data.length-1){return false}
     this.pointer ++ 
     this.data[this.pointer] = data
   }
@@ -20,104 +20,6 @@ class Stack{
   isEmpty(){
     if(this.pointer==-1){return true}
   }
-}
-
-class Queue{/*Circular Queue*/
-  constructor(size){
-    this.characters = new Array(size)
-    this.frontPointer = 0
-    this.rearPointer = -1
-    this.size = size
-    this.count = 0
-  }
-
-  /*Queue methods:*/
-  enqueue(character){
-    if(this.full()){return 'combat full'}
-    this.rearPointer = (this.rearPointer+1)%this.size
-    this.count++
-    this.characters[this.rearPointer] = character
-  }
-  dequeue(){
-    if(this.empty()){return 'no combat'}
-    const removed = this.characters[this.frontPointer]
-    this.count--
-    this.frontPointer = (this.frontPointer+1)%this.size
-    //if(this.empty()){
-      //this.frontPointer = 0
-      //this.rearPointer = -1
-    //}
-    return removed
-  }
-  peek(){
-    if(this.empty()){return 'no combat'}
-    return this.characters[this.frontPointer]
-  }
-  full(){
-    return this.count === this.characters.length
-  }
-  empty(){
-    return this.count === 0
-  }
-  currentLength(){
-    return this.frontPointer - this.rearPointer
-  }
- 
-}
-
-class TurnQueue extends Queue{/*Modified Circular Queue*/
-  constructor(size){
-    super(size)
-    this.alternate=0
-  }
-  dequeue(){
-    //if(this.empty()){return 'no combat'}
-    
-    //console.log(this.frontPointer,this.rearPointer)
-    const removed = this.characters[this.frontPointer]
-    
-    //this.count--
-    this.frontPointer = (this.frontPointer+1)%this.size
-    if(this.empty()||this.frontPointer>=this.count){
-      this.frontPointer = 0
-      this.rearPointer = this.count
-    }
-    return removed
-  }
-  getCount(){
-    return this.count
-  }
- /*Unique methods:*/
-  createEncounter(participants){
-    /*merge sort*/
-
-  }
-  sortEncounter(){/*takes entire encounter and sorts it by speed value*/
-    
-  }
-  processTurn(){/*dequeues character to the back of the queue*/
-    
-  }
-  renderOrder(){/*renders the turn order*/
-    for(n=0;n<this.count;n++){
-      /*this makes a tesselated row of hexagons!*/
-      portraits.rowChange((Math.floor(initialPortrait)+n)%9)
-      portraits.frameIncrement(n==0?1:0)
-      portraits.updatePosition(-160+18+26*n,90-16-14*((n+Math.floor(this.alternate))%2))
-      portraits.render()
-    }
-    
-  }
-  alternate(){
-    this.alternate = (this.alternate + 1)%2
-  }
-  remove(){
-    let cache = this.peek()
-    this.characters.splice(this.frontPointer,1)
-    this.count--
-    return cache
-  }
-
 }
 
 class PriorityQueue {
@@ -157,11 +59,12 @@ class PriorityQueue {
 }
 
 class PriorityTurnQueue extends PriorityQueue{
-  constructor(portraitsCombat,portraitsIdle){
+  constructor(iconsCombat,hexesCombat,portraitsIdle){
     super()
     this.turnNumber = 1
     this.pointer = 0
-    this.portraitsCombat = portraitsCombat
+    this.iconsCombat = iconsCombat
+    this.hexesCombat = hexesCombat
     this.portraitsIdle = portraitsIdle
     this.alternate = 0
     this.combat = false
@@ -209,7 +112,7 @@ class PriorityTurnQueue extends PriorityQueue{
     this.turnNumber = 1
   }
   renderTurnOrder(){
-    let portraits = this.combat ? this.portraitsCombat : this.portraitsIdle
+    let portraits = this.combat ? this.iconsCombat : this.portraitsIdle
     let portraitCount = this.queue.length
     const portraitStartX = -160 + 4 + 13
     const portraitDefaultY = 90-16
@@ -218,15 +121,30 @@ class PriorityTurnQueue extends PriorityQueue{
     /*Turn Order:*/
     for(let n=0;n<portraitCount;n++){
       /*this makes a tesselated row of hexagons!*/
-      portraits.rowChange(this.softDequeue().getId())
+      //console.log(this.softDequeue().getType())
+      let portraitChar = this.softDequeue()
+      portraits.animationChange(portraitChar.getType())
       
       if(n>11){
         this.resetPointer()
         return
       }
-      portraits.frameSet(n==0?1:0)
-      portraits.updatePosition(portraitStartX+portraitTesselationWidth*n,
-      portraitDefaultY-portraitTesselationHeight*((n+Math.floor(this.alternate))%2))
+      let isSelected = n==0?1:0
+      let positionX = portraitStartX+portraitTesselationWidth*n
+      let positionY = portraitDefaultY-portraitTesselationHeight*((n+Math.floor(this.alternate))%2)
+
+      portraits.frameSet(isSelected)
+      if(this.combat){
+        let allegiance = portraitChar.getAllegiance()
+        if(allegiance=="party"){this.hexesCombat.rowChange(0)}
+        else{
+          this.hexesCombat.rowChange(2 - allegiances[allegiance]["party"]) /*1 if allied, 2 if neutral, 3 if hostile*/
+        }
+        this.hexesCombat.frameSet(isSelected)
+        this.hexesCombat.updatePosition(positionX,positionY)
+        this.hexesCombat.render()
+      }
+      portraits.updatePosition(positionX,positionY)
       portraits.render()
     }
   }

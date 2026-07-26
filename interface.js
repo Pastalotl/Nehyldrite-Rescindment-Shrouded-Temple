@@ -133,6 +133,25 @@ class Textbox extends Ui{
   /*if out of bounds*/
   return false
   }
+  writeGlyph(glyph,x,y){
+    x = x=undefined?this.position.x:x
+    y = y=undefined?this.positiion.y:y
+    this.updatePosition(x,y)
+    this.frame.col = (glyph.charCodeAt(0)-32)%this.columns
+    this.frame.row = Math.floor((glyph.charCodeAt(0)-32)/this.columns)
+    this.render()
+
+  }
+  writeFrom(sentence,x,y){
+    x = x==undefined?this.position.x:x
+    y = y==undefined?this.position.y:y
+    let totalLength = sentence.length
+    for(let n = 0; n<totalLength;n++){
+      //console.log(sentence[n],x+n*(this.frame.width+this.spacing),y)
+      this.writeGlyph(sentence[n],x+n*(this.frame.width),y)
+    }
+    this.updatePosition(x,y) /*restore to original coordiates if cached*/
+  }
   writeText(sentence){
     let spacing = this.spacing
     //console.log("Begin write")
@@ -176,16 +195,36 @@ class Textbox extends Ui{
   }
 
 }
+class DiageticTextbox extends Textbox{ /*special textbox that renders like an entity*/
+  constructor(imagePath,row,column,x,y,width,height,sheetInfo,boundary){
+    super(imagePath,row,column,x,y,width,height,sheetInfo,boundary)
+  }
+  render(){
+  this.sheet.onload = 
+    ctx.drawImage(
+      this.sheet,
+      this.frame.col*this.frame.width,
+      this.frame.row*this.frame.height, 
+      this.frame.width,
+      this.frame.height,
+      (this.position.x*scale + centre.x - cam.x*scale) - scale*Math.floor(this.frame.width/2),
+       (-1 * this.position.y*scale + centre.y + cam.y*scale) - scale*Math.floor(this.frame.height/2), 
+      scale * this.frame.width, 
+      scale * this.frame.height
+    )
+  }
+}
 class TypesetTextbox extends Textbox{
   constructor(font,boundary){
     if(font == "nehyld-outline"){
       super("./Assets/Icons/typeset-nehyld-outline.png",0,0,0,0,7,9,[14,14,14,14,14,14,14,12],boundary)
       this.spacing = -1
       this.returnCharacter = "|".charCodeAt(0)
-      console.log(this.returnCharacter)
+      //console.log(this.returnCharacter)
     }
     else{
       super("./Assets/Icons/typeset-nehyld-monospace.png",0,0,0,0,5,7,[14,14,14,14,14,14,14,12],boundary)
+      this.returnCharacter = "|".charCodeAt(0)
     }
   }
 }

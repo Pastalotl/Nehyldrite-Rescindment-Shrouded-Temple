@@ -41,7 +41,7 @@ function keyDown(event){
     temple.stopBGM();
     spellPsychic.currentTime = 0
     spellPsychic.play()
-    console.log(playerSelections)
+    //console.log(playerSelections)
     temple.addObject(charRecipes.createCharacter(playerSelections[0].name,-48,0),"vestibule")
     temple.addObject(charRecipes.createCharacter(playerSelections[1].name,-64,16),"vestibule")
     temple.addObject(charRecipes.createCharacter(playerSelections[2].name,-64,-16),"vestibule")
@@ -266,7 +266,7 @@ function userAction(event){
     targeting = false
   }
   if(event.code == "KeyZ"&&temple.peek().isPlayable()&&actionNum>-1){
-    if(actionNum==6){
+    if(actionNum==6){ /*REST*/
       if(temple.isCombat()) return
       let level = temple.getCurrentLevel()
       N = level.getCount() - 1

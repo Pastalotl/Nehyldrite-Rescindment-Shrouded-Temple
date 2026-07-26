@@ -1,24 +1,29 @@
-class Level{
+/*An abstract collection of objects in an undefined space*/
+class Level{ 
   constructor(){
     this.objects = []
-    this.renderStack = new Stack(64) /*maybe make the stack dynamic?
-    current fixed stack forces a limit on how many entities can be
-    in one level.*/
-    this.turnQueue = new PriorityTurnQueue(new Icon("./Assets/Icons/portraits-combat-full.png",0,0,60,-60,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+    this.renderStack = new Stack() /*stack is now dynamic
+    be vigilant for errors pertaining to this change*/
+    this.turnQueue = new PriorityTurnQueue(new Icon("./Assets/Icons/icons-combat-full.png",0,0,60,-60,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
     {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2},{animation:"Automata",frames:2},{animation:"Cavro",frames:2},{animation:"Husk",frames:2},{animation:"Spectre",frames:2},
-    {animation:"Warden",frames:2},{animation:"Spectre",frames:2}]),new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigelas",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+    {animation:"Warden",frames:2},{animation:"Cultist",frames:2}]),
+    new Icon("./Assets/Icons/hexes-combat.png",0,0,0,0,32,32,[{animation:"player",frames:2},{animation:"ally",frames:2},{animation:"neutral",frames:2},{animation:"hostile",frames:2}]),
+    new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2}]))
     this.combat = false
   }
 
   /*General Methods*/
   addObject(object){
+    //if(object.getKey().slice(0,3)=="act") console.log(this.objects)
     this.objects.push(object)
+    //if(object.getKey().slice(0,3)=="act") console.log(this.objects[this.objects.length-1])
     if(object.getKey().slice(0,3)=="cha"){
       if(object.isPlayable()||this.combat){
         this.turnQueue.enqueueCharacter(object)
       }
     }
+    //console.log(this.objects)
   }
   getObjects(){
     return this.objects
@@ -31,12 +36,12 @@ class Level{
   }
   removeObject(key){
     let request = this.getObjectIndex(key)
-    console.log("REQUEST",key)
-    console.log(request)
+    //console.log("REQUEST",key)
+    //console.log(request)
     if(request==null){return}
     this.objects.splice(request,1)
     if(key.slice(0,3) == "cha"){
-      console.log(this.turnQueue)
+      //console.log(this.turnQueue)
       this.turnQueue.removeCharacter(key)
     }
   }
@@ -68,7 +73,10 @@ class Level{
     /*Sort the objects by their Y coordinates*/
     for(let n=this.objects.length-1;n>-1;n--){
       //console.log(this.objects[n])
-      if(this.objects[n].getKey().slice(0,3)!="obj"){
+      if(this.objects[n].getKey().slice(0,3)=="act"){
+        this.objects[n].updatePosition(this.objects[n].getPosition().x,this.objects[n].getPosition().y-16)
+      }
+      else if(this.objects[n].getKey().slice(0,3)!="obj"){
         if(this.objects[n].isDestroyed()){
         this.removeObject(this.objects[n].getKey())
       }}
@@ -79,7 +87,8 @@ class Level{
     /*push objects into a stack to render then*/
     if(frame == 0){
       for(var n=this.objects.length-1;n>-1;n--){
-        this.objects[n].frameIncrement(1)
+        if(this.objects[n].getKey().slice(0,3)!="act") this.objects[n].frameIncrement(1)
+          //else console.log(this.objects[n])
         this.renderStack.push(this.objects[n])
       }
     }
@@ -91,6 +100,9 @@ class Level{
     //console.log(this.objects,this.renderStack.data)
     /*render each object in the stack*/
     while(! this.renderStack.isEmpty()){
+      if(this.renderStack.peek().getKey().slice(0,3)=="act"){
+        this.renderStack.peek().updatePosition(this.renderStack.peek().getPosition().x,this.renderStack.peek().getPosition().y+16)
+      }
       this.renderStack.pop().render()
     }
     
@@ -159,7 +171,7 @@ class Level{
         }
       }
     }
-    console.log(this.turnQueue.queue)
+    //console.log(this.turnQueue.queue)
   }
   renderTurnOrder(){
     this.turnQueue.renderTurnOrder()
@@ -174,7 +186,7 @@ class Level{
     this.turnQueue.resetPointer()
   }
 }
-
+/*A defined space and the objects contained within it*/
 class Area extends Level{
   constructor(type,spritesheet,boundaries, bgm, loadZones, spawnPoints){
     super()
@@ -186,6 +198,7 @@ class Area extends Level{
     this.bgm.loop = true
     this.loadZones = loadZones
     this.spawnPoints = spawnPoints
+    this.damageReads = []
   }
   render(){
     ctx.drawImage(
@@ -324,14 +337,15 @@ class Area extends Level{
     return (-1 * y*scale + centre.y + cam.y*scale) - scale*Math.floor(height/2)
   }
   inLoadZone(xCheck,yCheck,id){
-    if(id > 6) {console.log(false);return false}
+    if(id > 6) {//console.log(false);
+      return false}
     let n = this.loadZones.length-1
     for(n;n>-1;n--){
       if(
         (this.loadZones[n].xMin<=xCheck&& xCheck<=this.loadZones[n].xMax)
         && (this.loadZones[n].yMin<=yCheck&& yCheck<=this.loadZones[n].yMax)
       ){
-        console.log(true)
+        //console.log(true)
         return this.loadZones[n].room}
     }
     //console.log(false)
@@ -343,7 +357,7 @@ class Area extends Level{
     this.resetPointer()
     for(u;u>-1;u--){
       let character = this.softDequeue()
-      console.log(character.getKey().slice(0,3),character.getId())
+      //console.log(character.getKey().slice(0,3),character.getId())
       if(character.getKey().slice(0,3)=="cha"){
         if(character.isPlayable()){
           playerCharacters.push(character)
@@ -352,12 +366,12 @@ class Area extends Level{
     }
     u = playerCharacters.length - 1
     for(u;u>-1;u--){
-      console.log(playerCharacters[u].getKey(),u)
+      //console.log(playerCharacters[u].getKey(),u)
       this.removeObject(playerCharacters[u].getKey())
     }
-    console.log("Objects remaining in room", this.objects)
-    console.log("Objects remaining in queue", this.queue)
-    console.log("Characters moving rooms", playerCharacters)
+    //console.log("Objects remaining in room:", this.objects)
+    //console.log("Objects remaining in queue:", this.queue)
+    //console.log("Characters moving rooms:", playerCharacters)
     this.resetPointer()
     return playerCharacters
   }
@@ -370,41 +384,89 @@ class Area extends Level{
       if(this.spawnPoints[n].room == previousRoom){
         playerCharacters[m].updatePosition(this.spawnPoints[n].x,this.spawnPoints[n].y)
         this.addObject(playerCharacters[m])
-        console.log(`spawn point: ${playerCharacters[m].getType()} m:${m}`)
+        //console.log(`spawn point: ${playerCharacters[m].getType()} m:${m}`)
         m++
         if(m > charcount){
           this.formQueue()
-          console.log("new queue:", this.turnQueue.queue)
+          //console.log("new queue:", this.turnQueue.queue)
           let attempts = 0
           while(this.peek().getKey() != startCharacter || attempts == 32){
             this.endTurn()
             attempts++
           }
-    console.log("shuffled queue:", this.turnQueue.queue)
+    //console.log("shuffled queue:", this.turnQueue.queue)
           return
         }
       }
     }
-    console.log(playerCharacters.length - 1, m)
+    //console.log(playerCharacters.length - 1, m)
     //if(playerCharacters.length - 1 > m){
       for(m;m<charcount+1;m++){
-        console.log(`fuck it, we ball: ${playerCharacters[m].getType() }  m:${m}`)
+        //console.log(`fuck it, we ball: ${playerCharacters[m].getType() }  m:${m}`)
         playerCharacters[m].updatePosition(0,0)
         this.addObject(playerCharacters[m])
       }
    // }
     this.formQueue()
-    console.log("new queue:", this.turnQueue.queue)
+    //console.log("new queue:", this.turnQueue.queue)
     let attempts = 0
     while(this.peek().getKey() != startCharacter || attempts == 32){
       this.endTurn()
       attempts++
     }
-    console.log("shuffled queue:", this.turnQueue.queue)
+    //console.log("shuffled queue:", this.turnQueue.queue)
   }
+  clearDamageReads(){
+    this.damageReads = []
+  }
+  addDamageRead(damage,targetX,targetY){
+    //console.log(damage,targetX,targetY)
+    let font = "./Assets/Icons/typeset-nehyld-outline-"
+    let offset = {x:0,y:0}
+    if(damage>0){ /*deals damage - red*/
+      font += "damage.png"
+      offset = {x:8,y:8}
+    }
+    else if(damage == 0||damage == "nehyldUsed"){ /*deals no damage - don't show*/
+      return
+    }
+    else if(damage < 0){ /*heals - green*/
+      font += "heal.png"
+      offset = {x:8,y:-8}
+      damage = "+" + String(Math.abs(damage))
+    }
+    else{ /*is likely an effect name*/
+      font += "effect.png"
+      offset = {x:-16,y:0}
+    }
+    //targetX = targetX-cam.x + 16
+    //targetY = targetY-cam.y + 4
+    let damageRead = {box: new DiageticTextbox(font,0,0,targetX+offset.x,targetY+offset.y,7,9,[14,14,14,14,14,14,14,12],{xMin:0,xMax:0,yMin:0,yMax:0}), msg: String(damage), renders:0}
+    
+    this.damageReads.push(damageRead)
+    //console.log(font)
+  }
+  renderDamageReads(){
+    const maxRenders = 23
+    if(this.damageReads.length == 0) return false
+    let damageRead = undefined
+    for(let n = this.damageReads.length-1;n>-1;n--){
+      //console.log(this.damageReads[n])
+      damageRead = this.damageReads[n]
+      ctx.globalAlpha = 1 - (this.damageReads[n].renders / maxRenders)**2
+      damageRead.box.writeFrom(damageRead.msg)
+      ctx.globalAlpha = 1
+      this.damageReads[n].renders += 1
+      this.damageReads[n].box.position.y += Math.floor(this.damageReads[n].renders / 11)
+      
+      if(this.damageReads[n].renders > maxRenders){
+        this.damageReads.splice(n,1)
+      }
+    }
 
+  }
 }
-
+/*A collection of defined spaces with objects inside them*/
 class Rooms{
   constructor(){
     this.areas = []
@@ -469,7 +531,10 @@ class Rooms{
     return this.areas[this.currentArea].cursorInBounds(xCheck,yCheck,allowance)
   }
   radiusUnobstructed(xCheck,yCheck,radius,originKey){
-    return this.areas[this.currentArea].radiusUnobstructed(xCheck,yCheck,radius,originKey)
+  return this.areas[this.currentArea].radiusUnobstructed(xCheck,yCheck,radius,originKey)
+  }
+  renderDamageReads(){
+    this.areas[this.currentArea].renderDamageReads()
   }
     /*General Methods*/
   addObject(object,areaType){
@@ -552,7 +617,6 @@ class Rooms{
       2718)
     }
   }
-
   /*Stack Methods*/
   renderObjects(frame){
     this.areas[this.currentArea].renderObjects(frame)

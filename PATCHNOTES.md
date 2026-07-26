@@ -1,8 +1,42 @@
 # Patch Notes
-The current version is v0.3.8e from 2026-03-30
+The currently released version is v0.3.9a from 2026-07-27
+
+
+## v0.3.9a (2026-07-27)
+A selection of changes to improve the game's polish and usability.
+Most changes involve menus and interface, but also include visual parity fixes.
+Hopefully this is the last patch before v0.4.0 which should add computer counter-play to the game!
+### Gameplay
+ - Characters can now use targeted actions that deal no damage on themselves
+### Visual Changes
+ - The Automata now has its own sprite
+ - Combat portraits now show allegiance backgrounds adaptively
+ - Cavros' allegiance is currently 'neutral' towards the party
+ - Lower menu positions have been adjusted
+ - Actions no longer render over everything
+ - Some actions (Axe-Throw, Quick-Bolt, Pin Shot, Propel, Pounce, Tackle) now have parabolic arcs, rather than linear paths of travel
+ - Action damage is now shown when used on a target
+ - Effects applied to a target are shown when an action is used
+ - All playable actions now have animations (added: Brace, Lock-On, Withdraw, Assess, Endure, Propel, Stun, Detect, Fountain, X-Slice)
+### Text Changes
+ - Actions now have visible key prompts underneath them
+ - Turn order now prompts the end turn key
+ - Turn order no longer gives the character's ID information
+ - Lower menu now displays character names
+ - Lower menu now labels the skill meter
+ - Character selection menu now has key prompts
+ - Expanded loading screen flavour text
+### Sprite Changes
+ - New idle sprite for Vayens
+- Combat portraits have been updated with new Automata colours
+### Bug Fixes
+ - The number of entities that can be rendered in a room is no longer capped at 64
+ - Stopped actions from flickering when used
+
 
 ## v0.3.8e (2026-03-30)
-An assortion of minor changes and fixes
+An assortion of minor changes and fixes.
+Largely a small visual update.
 ### Font Changes
 - New font overall replacing previous one
 - Alterations of certain characters in font
@@ -22,6 +56,7 @@ An assortion of minor changes and fixes
 - Actions that spawn entities or characters (Automata, Shield) can no longer target areas that would cause a collision with the new entity
 - Enemies with hit boxes stuck in walls can now be targeted by moving the cursor out of the playable boundary (to a limit)
 
+
 ## v0.3.8d (2026-03-17)
 Various quick bug fixes!
 ### Bug Fixes
@@ -31,8 +66,10 @@ Various quick bug fixes!
 - Health bars will more accurately display percentages
 - Actions that should target an area around the user (Cleave, Sweep) will no longer target the area around the cursor
 
+
 ## v0.3.8c (2026-03-14)- GitHub Release
-Hiya! This is the first GitHub release of Nehyldrite: Rescindment - Shrouded Temple (prototype 3). Today is also pi day (2026/3/14)! Below is a bunch of "fun" bits and bobs about this release/patch!
+Shrouded Temple Release Patch
+Details of what was present in launch version:
 ### Features
 - Character select screen
 - Start screen
@@ -62,11 +99,11 @@ Hiya! This is the first GitHub release of Nehyldrite: Rescindment - Shrouded Tem
 - Combat turn system
 - Fun
 ### Known Issues
-- Actions are rendered oddly, should be rendered in the render stack, but rendered separately for speed
+- Actions are rendered oddly, should be rendered in the render stack, but rendered separately for speed [resolved in v0.3.9]
 - Turn based actions do not add their speed values to requeuing 
 - Enemies do nothing... at all
 - Ifforrem is allowed to exist (submitted by Calian)
-- Nigeläs' name has no accent (I'M SORRY)
+- Nigeläs' name has no accent (I'M SORRY) [resolved in v0.3.8e]
 - Minimal animations finished
 - Nothing does anything, really
 ### Planned Additions

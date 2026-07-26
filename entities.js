@@ -14,6 +14,12 @@ class Entity{
     }
     this.vector = {x:0,y:0}
     this.radius = 0
+
+    this.originPoint = {x:0,y:0}
+    this.targetPoint = {x:0,y:0}
+    this.midPoint = {x:0,y:0}
+    this.t = 0 /*parameter*/
+    this.distancePerFrame = 1
   }
   render(){ /*doesn't work outside of a loop?*/
     this.sheet.onload = 
@@ -84,6 +90,7 @@ class Entity{
   getPositionCentre(){
     return {x:this.position.x,y:this.position.y+this.frame.yOffset}
   }
+  /*
   updateVectorTarget(targetX,targetY){
     this.vector = {x:targetX-this.position.x,y:targetY-this.position.y}
   }
@@ -93,6 +100,7 @@ class Entity{
     this.position.x += this.vector.x * modulus
     this.position.y += this.vector.y * modulus 
   }
+    */
   getType(){
     return this.type
   }
@@ -106,7 +114,60 @@ class Entity{
     return this.radius
   }
   addEffect(){
-    return
+    return false
+  }
+  setPathPoints(originX,originY,targetX,targetY){
+    //console.log(originX,this.t)
+    this.originPoint = {x:originX,y:originY}
+    this.targetPoint = {x:targetX,y:targetY}
+    this.midPoint = {x:(originX+targetX)/2,y:(originY+targetY)/2 + Math.abs(targetX - originX)/8}
+    this.t = originX
+    //console.log(this.originPoint,this.targetPoint,this.midPoint)
+  }
+  setDistancePerFrame(distPFrame){
+    this.distancePerFrame = Math.round(distPFrame)
+  }
+  parabolicTravel(){
+    let a = this.originPoint.x
+    let b = this.originPoint.y
+    let c = this.targetPoint.x
+    let d = this.targetPoint.y
+    let m = this.midPoint.x
+    let n = this.midPoint.y
+
+    this.t = this.t + Math.sign(c-a) * this.distancePerFrame
+    if(this.t>=c&&c>=a||this.t<=c&&a>=c){
+      this.t = c
+      this.position = {x:c,y:d}
+      //console.log([a,b],[c,d],this.t,this.position)
+      return true
+    }
+    this.position.x = Math.floor(this.t)
+    this.position.y = Math.floor((this.t - a)/(m-c) * 
+    ( (n-b)*(this.t-c)/(m-a) - (d-b)*(this.t-m)/(c-a) ) + b)
+    //console.log([a,b],[c,d],this.t,this.position)
+    return false
+    
+  }
+  linearTravel(){
+    let a = this.originPoint.x
+    let b = this.originPoint.y
+    let c = this.targetPoint.x
+    let d = this.targetPoint.y
+
+    this.t = this.t + Math.sign(c-a) * this.distancePerFrame
+    //console.log(this.t)
+    if(this.t>=c&&c>=a||this.t<=c&&a>=c){
+      this.t = c
+      this.position = {x:c,y:d}
+      //console.log([a,b],[c,d],this.t,this.position)
+      return true
+    }
+
+    this.position.x = Math.floor(this.t)
+    this.position.y = Math.floor((d-b)/(c-a) * (this.t-a) + b)
+    //console.log([a,b],[c,d],this.t,this.position)
+    return false
   }
 }
 
@@ -118,14 +179,14 @@ class mapEntity extends Entity{
   }
   changeHealth(value){
     this.health += value
-    console.log(this.health)
+    //console.log(this.health)
     if(this.health<1){
-      console.log("destroyed")
+      //console.log("destroyed")
       this.destroy()
     }
   }
   destroy(){
-    console.log("DESTRUCTION OF ",this.type)
+    //console.log("DESTRUCTION OF ",this.type)
     if(this.animationSearch("open") != undefined){
       this.animationChange("open")
       this.health = 343
@@ -144,7 +205,9 @@ class mapEntity extends Entity{
    dealDamage(value,damageType){
     if(value>0){
         this.changeHealth(-value)
+        return(value)
     }
+    return 0
   }
   frameIncrement(inc){ /*increment the current animation's frame*/
      /*workaround for decrement issue: 
@@ -156,7 +219,7 @@ class mapEntity extends Entity{
     //if(this.key == "ACTION"){console.log(this.sheetInfo,this.frame.row)}
     this.frame.col = (this.frame.col + inc) % this.sheetInfo[this.frame.row].frames
     if(this.frame.col == this.sheetInfo[this.frame.row].frames - 1 && this.health == 0.25) {
-      console.log(this.type,"DELETION",this.health)
+      //console.log(this.type,"DELETION",this.health)
       this.health = 0}
    
   }
@@ -228,15 +291,15 @@ class Character extends mapEntity{
     this.health = this.health<this.getMaxHealth()?this.health:this.getMaxHealth()
     this.health = this.health>0?this.health:0
     if(this.health<1){
-      console.log("killed",this.type)
+      //console.log("killed",this.type)
       this.destroy()}
   }
   dealDamage(value,damageType){
-    console.log(this.resistances)
+    //console.log(this.resistances)
     let n = this.resistances.length - 1
     let mult = 1
     for(n;n>-1;n--){
-        console.log(damageType, this.resistances[n])
+        //console.log(damageType, this.resistances[n])
       if(damageType == this.resistances[n].type){
         mult = this.resistances[n].mult
         break
@@ -246,8 +309,9 @@ class Character extends mapEntity{
     this.health = this.health<this.getMaxHealth()?this.health:this.getMaxHealth()
     console.log(`${this.type}: ${this.health + Math.round(value*mult)}HP -> ${this.health}HP \n (${value} damage x ${mult} from resistance = ${Math.round(value*mult)}) [${damageType}]`)
     if(this.health<1){
-      console.log("murdered",this.type)
+      //console.log("murdered",this.type)
       this.destroy()}
+      return(Math.round(value*mult))
   }
 
 
@@ -282,6 +346,10 @@ class Character extends mapEntity{
     if(actionNum >= this.actions.length){return 0}
     return this.actions[actionNum].getDamage(this.stats)
   }
+  getActionDamageType(actionNum){
+    if(actionNum >= this.actions.length){return ""}
+    return this.actions[actionNum].damage.type
+  }
   getReticleFrame(actionNum,targetX,targetY,level){
     if(actionNum >= this.actions.length || this.actionUsed){return 0}
     //let action = this.actions[actionNum]
@@ -313,12 +381,14 @@ class Character extends mapEntity{
 }
 
 class Action extends Entity{
-  constructor(type,imagePath,row,column,x,y,width,height,sheetInfo,cost,stat,multiplier,constant,damageType,targetType,range,effectRadius,selfEffect,targetEffect,movement,speed,animationType,description){
-    super("ACTION",type,imagePath,width,height,sheetInfo,0,x,y)
+  constructor(type,imagePath,row,column,x,y,width,height,sheetInfo,cost,stat,
+    multiplier,constant,damageType,targetType,range,effectRadius,selfEffect,targetEffect,movement,speed,travel,animationType,description){
+    super("act"+type,type,imagePath,width,height,sheetInfo,0,x,y)
     this.cost = cost
     this.damage = {stat:stat,mult:multiplier,const:constant,type:damageType}
     this.target = {type:targetType,range:range,radius:effectRadius}
     this.effects = {movement:movement,speed:speed,self:selfEffect,target:targetEffect}
+    this.animationTravel = travel
     this.animationType = animationType
     this.description = description
     this.currentTarget = undefined
@@ -338,18 +408,18 @@ class Action extends Entity{
     if(!(this.targetTypeValid(targetX,targetY,level,originKey))){
       reticleFrame = 2
       //return reticleFrame
-      /*YELLOW*/
+      /*ORANGE*/
     }
     if(!(this.inLine(originX,originY,targetX,targetY,level,originKey))){
       reticleFrame = 3
       //return reticleFrame
-      /*ORANGE*/
+      /*YELLOW*/
     }
     if(reticleFrame == 2 || reticleFrame == 3){
       return reticleFrame
     }
 
-    reticleFrame = 4
+    reticleFrame = 4 /*GREEN*/
     return reticleFrame
     /*GREEN*/
   }
@@ -380,8 +450,8 @@ class Action extends Entity{
       if(originY<=entityPosition.y&& entityPosition.y<=targetY || originY>=entityPosition.y&&entityPosition.y>=targetY){
       if(this.radiusIntersect(entityPosition.x,entityPosition.y,entity.getRadius(),originX,originY,dy_dx,dx_dy)){
         //console.log(entity)
-        console.log(`Origin (${originX},${originY}) \n Intersected by ${entity.getType()} (${entityPosition.x},${entityPosition.y}) \n gradients: dy/dx=${dy_dx}, dx/dy=${dx_dy} \n
-        Target ${this.currentTarget} @ (${targetX},${targetY})`)
+        /*console.log(`Origin (${originX},${originY}) \n Intersected by ${entity.getType()} (${entityPosition.x},${entityPosition.y}) \n gradients: dy/dx=${dy_dx}, dx/dy=${dx_dy} \n
+        Target ${this.currentTarget} @ (${targetX},${targetY})`)*/
         return false
       }}
     }}
@@ -392,7 +462,7 @@ class Action extends Entity{
     let n = level.getObjectCount()-1
     let objects = level.getObjects()
     this.areaTargets = []
-    if(this.effects.movement > 0){
+    if(this.effects.movement != 0){ /*check for obstructions if moving the character*/
       for(n;n>-1; n--){
       let entity = objects[n]
       if(entity.getKey() == originKey){
@@ -407,16 +477,20 @@ class Action extends Entity{
   }
     else if(this.effects.target != undefined){
         if(this.effects.target.slice(0,5) == "spawn"){
-          if(level.radiusUnobstructed(targetX,targetY,16,"fem858")){
+          if(level.radiusUnobstructed(targetX,targetY,16,"fem858")){ /*fem858 is an origin key that does not exist, therefore will always give a result impartial to the origin*/
             this.currentTarget = undefined
             return true
           }
           else return false
         }
     }
-    else if(this.target.type == "point" || this.target.type == "area" || this.target.type == "self"){
+    if(this.target.type == "point" || this.target.type == "area" || this.target.type == "self"){
       this.currentTarget = undefined
       return true
+    }
+    if(this.effects.self == undefined && this.getDamage({str:7,agl:7,vit:7,int:7,spt:7}) < 1){
+      originKey = "fem858" /*if it deals no damage, you can target yourself*/
+      //console.log("VALID FOR SELF TARGET")
     }
     for(n;n>-1; n--){
       let entity = objects[n]
@@ -461,20 +535,20 @@ class Action extends Entity{
     for(n;n>-1; n--){
       let entity = objects[n]
       //console.log(this.withinEllipse(targetX,targetY,entity.getPosition().x,entity.getPosition().y,this.effects.effectRadius),this.target.radius)
-        if(this.objectWithinEllipse(targetX,targetY,entity.getPosition().x,entity.getPosition().y,this.target.radius,entity.getRadius())){
+        if(entity.getKey().slice(0,3)!="act"&&this.objectWithinEllipse(targetX,targetY,entity.getPosition().x,entity.getPosition().y,this.target.radius,entity.getRadius())){
           this.areaTargets.push(entity)
-          console.log(`targeting ${entity.getKey()} <3`)
+          //console.log(`targeting ${entity.getKey()} <3`)
         }
     }
     return false
   }
   processAction(originX,originY,targetX,targetY,meter,level,originKey){
     if(this.targetValidation(originX,originY,targetX,targetY,meter,level,originKey) != 4){
-      console.log("action unavailable")
+      //console.log("action unavailable")
       return}
     let self = undefined
     let n = level.getCount() - 1
-    console.log(level)
+    //console.log(level)
     level.resetPointer()
       for(n;n>-1; n--){
       let entity = level.softDequeue()
@@ -501,7 +575,7 @@ class Action extends Entity{
         if(entity.getKey() == originKey){
           self = entity
         }
-        else if(entity.getKey() == this.currentTarget){
+        if(entity.getKey() == this.currentTarget){ /*used to be an else if, changed for self targeting*/
           target = entity
         }
         if(target != undefined && self != undefined) break
@@ -522,38 +596,47 @@ class Action extends Entity{
     }
     if(this.effects.self != null){
       self.addEffect(this.effects.self)
+      level.addDamageRead(this.effects.self,originX,originY)
       /*apply self effect to user*/
     }
+    let damage = self!=undefined?this.getDamage(self.getStats()):0
+    let estimate = 0
+    //console.log(target)
     switch(this.target.type){
       case "single":
-        target.dealDamage(this.getDamage(self.getStats()),this.damage.type)
+        estimate = target.dealDamage(damage,this.damage.type)
+        level.addDamageRead(estimate,targetX,targetY)
         if(this.effects.target != null){
           target.addEffect(this.effects.target)
+          level.addDamageRead(this.effects.target,targetX,targetY)
         }
         break
       case "self":
-        self.dealDamage(this.getDamage(self.getStats()),this.damage.type)
+        estimate = self.dealDamage(damage,this.damage.type)
+        level.addDamageRead(estimate,originX,originY)
         break
       case "area":
         let N = this.areaTargets.length - 1
         for(N;N>-1;N--){
           target = this.areaTargets[N]
-          console.log(target)
-          if(this.getDamage(self.getStats()) <= 0 || target.getKey() != originKey){
-            target.dealDamage(this.getDamage(self.getStats()),this.damage.type)
+          //console.log(target,damage)
+          if(damage <= 0 || target.getKey() != originKey){
+            estimate = target.dealDamage(damage, this.damage.type)
+            level.addDamageRead(estimate,target.getPosition().x,target.getPositionCentre().y)
           }
           if(this.effects.target != null){
             target.addEffect(this.effects.target)
+            level.addDamageRead(this.effects.target,target.getPosition().x,target.getPositionCentre().y)
           }
         }
         break
       case "point":
-        console.log(this.effects.target)
+        //console.log(this.effects.target)
         if(this.effects.target != undefined){
         if(this.effects.target.slice(0,5) == "spawn"){
-          console.log("spawn requested")
+          //console.log("spawn requested")
           let spawnRequest = this.effects.target.slice(5)
-          console.log(spawnRequest)
+          //console.log(spawnRequest)
           let spawn = undefined
           if(spawnRequest == "Automata"){
             spawn = charRecipes.createCharacter("Automata",targetX,targetY)
@@ -562,7 +645,7 @@ class Action extends Entity{
           else{
             spawn = entityRecipes.createEntity(spawnRequest.toLowerCase(),targetX,targetY)
           }
-          console.log(spawn)
+          //console.log(spawn)
           level.addObject(spawn)
         }
       }
@@ -573,8 +656,12 @@ class Action extends Entity{
     let currentAnimation = 0
     let n = 0
     let frame = 0
+    let targetReached = false
     this.frameSet(0)
-    console.log(this.sheetInfo)
+    //console.log(this.sheetInfo)
+    //console.log(this)
+    //console.log(level)
+    level.addObject(this)
 
     switch(this.animationType){
 
@@ -583,24 +670,25 @@ class Action extends Entity{
         if(originX > targetX){
           this.updatePosition(originX-0.5*this.target.range,originY)
           this.animationChange("swing-l")
-          console.log("swing-l",this.sheetInfo[this.animationSearch("swing-l")])
+          //console.log("swing-l",this.sheetInfo[this.animationSearch("swing-l")])
           frames = this.sheetInfo[this.animationSearch("swing-l")]!=undefined?this.sheetInfo[this.animationSearch("swing-l")].frames:0
         }
         else{
           this.updatePosition(originX+0.5*this.target.range,originY)
           this.animationChange("swing-r")
-          console.log("swing-r",this.sheetInfo[this.animationSearch("swing-r")])
+          //console.log("swing-r",this.sheetInfo[this.animationSearch("swing-r")])
           frames = this.sheetInfo[this.animationSearch("swing-r")]!=undefined?this.sheetInfo[this.animationSearch("swing-r")].frames:0
         }
         currentAnimation = setInterval(() => {
           //console.log(this.frame.col,this.frame.row,this.animationType,this.position)
-          this.render()
+          //this.render()
           n=(n+1)%33
           if(n==0) {this.frameIncrement(1); frame++}
           if(frame >= frames){
             if(this.sheetInfo[this.frame.row].animation == "impact"){
                 clearInterval(currentAnimation)
-                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
+                level.removeObject(this.key)
+                //this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
             else{
                 this.updatePosition(targetX,targetY)
@@ -608,6 +696,7 @@ class Action extends Entity{
                 this.frameSet(0)
                 frames = this.sheetInfo[this.animationSearch("impact")]!=undefined?this.sheetInfo[this.animationSearch("impact")].frames:0
                 frame = 0
+                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
            
           }
@@ -623,11 +712,12 @@ class Action extends Entity{
         frames = this.sheetInfo[this.animationSearch("self")]!=undefined?this.sheetInfo[this.animationSearch("self")].frames:0
         currentAnimation = setInterval(() => {
           //console.log(this.frame.col,this.frame.row,this.animationType,this.position)
-          this.render()
+          //this.render()
           n=(n+1)%33
           if(n==0) {this.frameIncrement(1); frame++}
           if(frame >= frames){
             clearInterval(currentAnimation)
+            level.removeObject(this.key)
             this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)}
           },1)
         break
@@ -637,32 +727,44 @@ class Action extends Entity{
       case "proj": /*PROJ (directional) on vector from user to target + IMPACT on target*/
         frame = -1
         this.updatePosition(originX,originY)
-        this.updateVectorTarget(targetX,targetY)
+        //this.updateVectorTarget(targetX,targetY)
+        this.setPathPoints(originX,originY,targetX,targetY)
+        this.setDistancePerFrame(this.target.range**0.5 / 16<0.5?1:this.target.range**0.5 / 16)
         if(originX > targetX){
           this.animationChange("proj-l")
           frames = this.sheetInfo[this.animationSearch("proj-l")]!=undefined?this.sheetInfo[this.animationSearch("proj-l")].frames:0
-          this.updateVectorTarget(targetX,targetY)
+          //this.updateVectorTarget(targetX,targetY)
           currentAnimation = setInterval(() => {
           //console.log(this.frame.col,this.frame.row,this.animationType,this.position)
-           this.render()
+           //this.render()
            n=(n+1)%33
           if(n==0) {this.frameIncrement(1)}
-          if(this.position.x<=targetX){
+          if(targetReached){
             if(frame == -1){
                 this.animationChange("impact")
                 this.frameSet(0)
                 frames = this.sheetInfo[this.animationSearch("impact")]!=undefined?this.sheetInfo[this.animationSearch("impact")].frames:0
                 frame = 0
+                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
             if(n==0){frame++}
             if(frame >= frames){
                 clearInterval(currentAnimation)
-                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
+                level.removeObject(this.key)
+                //this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
                 }
             }
             else{
-                this.vectorTravel(this.target.range**0.5 / 16)
-                this.updateVectorTarget(targetX,targetY)
+                //this.vectorTravel(this.target.range**0.5 / 16)
+                //this.updateVectorTarget(targetX,targetY)
+                //console.log("travel",this.position)
+                if(this.animationTravel=="parabolic"){
+                  targetReached = this.parabolicTravel()
+                  
+                }
+                else{
+                  targetReached = this.linearTravel()
+                }
                 }
             }, 1)
         }
@@ -672,25 +774,35 @@ class Action extends Entity{
           currentAnimation = setInterval(() => {
           //console.log(this.frame.col,this.frame.row,this.animationType,this.position)
           
-          this.render()
+          //this.render()
           n=(n+1)%33
           if(n==0) {this.frameIncrement(1)}
-          if(this.position.x>targetX||targetX==originX&&(this.position.y>targetY>originY||originY>targetY>this.position.y)){
+          if(targetReached){
+            //console.log("close enough")
            if(frame == -1){
                 this.animationChange("impact")
                 this.frameSet(0)
                 frames = this.sheetInfo[this.animationSearch("impact")]!=undefined?this.sheetInfo[this.animationSearch("impact")].frames:0
                 frame = 0
+                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
             if(n==0){frame++}
             if(frame >= frames){
                 clearInterval(currentAnimation)
-                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
+                level.removeObject(this.key)
+                //this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
         }
         else{
-          this.vectorTravel(this.target.range**0.5 / 16)
-           //this.updateVectorTarget(targetX,targetY)
+          //this.vectorTravel(this.target.range**0.5 / 16)
+          //this.updateVectorTarget(targetX,targetY)
+          //console.log("travel",this.position)
+          if(this.animationTravel=="parabolic"){
+            targetReached = this.parabolicTravel()    
+          }
+          else{
+            targetReached = this.linearTravel()
+          }
         }
     },  1)
     }
@@ -704,10 +816,11 @@ class Action extends Entity{
         frames = this.sheetInfo[this.animationSearch("target")]!=undefined?this.sheetInfo[this.animationSearch("target")].frames:0
         currentAnimation = setInterval(() => {
           n=(n+1)%33
-          this.render()
+          //this.render()
           if(n==0) {this.frameIncrement(1); frame++}
           if(frame >= frames){
             clearInterval(currentAnimation)
+            level.removeObject(this.key)
             this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)}
         },
       1)
@@ -718,7 +831,7 @@ class Action extends Entity{
       case "path": /*SWING (directional) on vector movement of self + IMPACT on target*/
       let self = undefined
         let N = level.getCount() - 1
-        console.log(level)
+        //console.log(level)
         level.resetPointer()
         for(N;N>-1; N--){
         let entity = level.softDequeue()
@@ -726,12 +839,14 @@ class Action extends Entity{
                 self = entity
             }
         }
-        console.log(self)
+        //console.log(self)
         if(self == undefined) return
 
         frame = -1
         this.updatePosition(originX,originY)
-        self.updateVectorTarget(targetX,targetY)
+        //self.updateVectorTarget(targetX,targetY)
+        self.setPathPoints(originX,originY,targetX,targetY)
+        self.setDistancePerFrame(this.target.range**0.5 / 8)
 
         if(originX > targetX){
           this.animationChange("swing-l")
@@ -740,25 +855,33 @@ class Action extends Entity{
           //console.log(this.frame.col,this.frame.row,this.animationType,this.position)
           this.position = self.getPositionCentre()
           this.position.x -= 16
-           this.render()
+           //this.render()
            n=(n+1)%33
           if(n==0) {this.frameIncrement(1)}
-          if(self.getPosition().x<=targetX){
+          if(targetReached){
             if(frame == -1){
                 this.animationChange("impact")
                 this.frameSet(0)
                 frames = this.sheetInfo[this.animationSearch("impact")]!=undefined?this.sheetInfo[this.animationSearch("impact")].frames:0
                 frame = 0
+                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
             if(n==0){frame++}
             if(frame >= frames){
                 clearInterval(currentAnimation)
-                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
+                level.removeObject(this.key)
+                //this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
                 self.updatePosition(targetX,targetY)
                 }
             }
             else{
-                self.vectorTravel(this.target.range**0.5 / 8)
+                //self.vectorTravel(this.target.range**0.5 / 8)
+                if(this.animationTravel=="parabolic"){
+                  targetReached = self.parabolicTravel()    
+                }
+                else{
+                  targetReached = self.linearTravel()
+                }
                 }
             }, 1)
         }
@@ -771,12 +894,12 @@ class Action extends Entity{
           this.position = self.getPositionCentre()
           this.position.x += 16
           //console.log(this.position)
-          this.render()
+          //this.render()
           //console.log(n)
           n=(n+1)%33
           if(n==0) {this.frameIncrement(1)}
           //console.log(originY,targetY,self.getPositionCentre().y)
-          if(self.getPosition().x>targetX   ||  targetX==originX && (self.getPositionCentre().y>=targetY>>originY || originY>targetY>=self.getPositionCentre().y)   ){
+          if(targetReached){
            if(frame == -1){
                 this.animationChange("impact")
                 this.frameSet(0)
@@ -786,15 +909,20 @@ class Action extends Entity{
             if(n==0){frame++}
             if(frame >= frames){
                 clearInterval(currentAnimation)
+                level.removeObject(this.key)
                 this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
                 self.updatePosition(targetX,targetY)
             }
         }
         else{
-            self.vectorTravel(this.target.range**0.5 / 8)
-          
-           //this.updateVectorTarget(targetX,targetY)
-        }
+                //self.vectorTravel(this.target.range**0.5 / 8)
+                if(this.animationTravel=="parabolic"){
+                  targetReached = self.parabolicTravel()    
+                }
+                else{
+                  targetReached = self.linearTravel()
+                }
+                }
     },  1)
     }
         break
@@ -802,34 +930,39 @@ class Action extends Entity{
 
 
       case "rain": /**erm*/
-      let acceleration = 1
+      let acceleration = 0.7
       let velocity = 0
+      
       frame = -1
-        this.updatePosition(targetX,targetY + 64)
+        this.updatePosition(targetX,targetY + 128)
+        let roughHeight = this.position.y
         this.animationChange("rain")
         frames = this.sheetInfo[this.animationSearch("rain")]!=undefined?this.sheetInfo[this.animationSearch("rain")].frames:0
         currentAnimation = setInterval(() => {
-          this.render()
+          //this.render()
           n = (n+1)%33
-          if(n == 0) {this.frameIncrement(1); velocity += acceleration}
+          if(n == 0) {this.frameIncrement(1); velocity = (velocity+acceleration)}
         
         if(this.position.y <= targetY){
-          console.log("change",this.position.y,velocity,targetY)
+          //console.log("change",this.position.y,velocity,targetY)
         if(frame == -1){
                 this.animationChange("impact")
                 this.frameSet(0)
                 frames = this.sheetInfo[this.animationSearch("impact")]!=undefined?this.sheetInfo[this.animationSearch("impact")].frames:0
                 frame = 0
+                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
             if(n==0){frame++}
             if(frame >= frames){
                 clearInterval(currentAnimation)
-                this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
+                level.removeObject(this.key)
+                //this.calculateAction(originX,originY,targetX,targetY,meter,level,originKey)
             }
         }
         else{
-          this.updatePosition(targetX,this.position.y - velocity)
-          console.log("new",this.position.y,velocity,targetY)
+          roughHeight -= acceleration
+          this.updatePosition(targetX,Math.round(roughHeight))
+          //console.log("new",this.position.y,velocity,targetY)
            //this.updateVectorTarget(targetX,targetY)
         }
       },1)

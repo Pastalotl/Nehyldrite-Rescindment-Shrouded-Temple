@@ -9,7 +9,7 @@ class Hashtable{
     if(record==undefined){return null}
     var n = record.length - 1
     for(n;n>-1;n--){
-      console.log(n,record[n])
+      //console.log(n,record[n])
       if(record[n].location == location){
         return record[n].data
       }
@@ -103,7 +103,7 @@ class ActionTable extends Hashtable{
     //}
     return (new Action(type,record.imagePath,0,0,0,0,record.width,record.height,record.sheetInfo,
       record.cost,record.stat,record.multiplier,record.constant,record.damageType,record.targetType,record.range,
-    record.effectRadius,record.selfEffect,record.targetEffect,record.movement,record.speed,record.animationType,
+    record.effectRadius,record.selfEffect,record.targetEffect,record.movement,record.speed,record.travel,record.animationType,
   record.description))
 
   }

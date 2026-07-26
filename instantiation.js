@@ -173,7 +173,7 @@ menu = new Icon("./Assets/Icons/player-actions-double.png",3,0,-60,-60,24,24,[{a
   {animation:"Ddwgyl-default",frames:6},{animation:"Ddwgyl-select",frames:6},{animation:"Vayens-default",frames:6},{animation:"Vayens-select",frames:6},
   {animation:"Silaera-default",frames:6},{animation:"Silaera-select",frames:6},{animation:"common-default",frames:2},{animation:"common-select",frames:2}])
 
-lowerIcon = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
+lowerIcon = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-48,-74,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
   {animation:"Ddwgyl",frames:2},{animation:"Vayens",frames:2},{animation:"Silaera",frames:2}])
 
 chaSelectMenu = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32,32,[{animation:"Nigel@s",frames:2},{animation:"Kauplaire",frames:2},{animation:"Ifforrem",frames:2},{animation:"Calian",frames:2},
@@ -181,23 +181,27 @@ chaSelectMenu = new Icon("./Assets/Icons/portraits-idle-full.png",0,1,-44,-70,32
 
 reticle = new Icon("./Assets/Icons/reticle.png",0,0,0,0,16,16,[{animation:"reticle",frames:5}])
 /*stat bars*/
-healthBar = new StatBar("./Assets/Icons/meters-health.png",0,20,-78,-70,32,13,[21],[20])
-skillBar = new StatBar("./Assets/Icons/meters-skill.png",0,20,-10,-70,32,13,[4,4,4,6,6,5,6],[3,3,3,5,5,4,5])
-costBar = new StatBar("./Assets/Icons/meters-skill.png",0,20,142,-43,32,13,[4,4,4,6,6,5,6],[3,3,3,5,5,4,5])
-moveBar = new StatBar("./Assets/Icons/meters-movement.png",0,20,-140,-70,24,24,[21],[20])
+healthBar = new StatBar("./Assets/Icons/meters-health.png",0,20,-88,-71,32,13,[21],[20])
+skillBar = new StatBar("./Assets/Icons/meters-skill.png",0,20,-10,-73,32,13,[4,4,4,6,6,5,6],[3,3,3,5,5,4,5])
+costBar = new StatBar("./Assets/Icons/meters-skill.png",0,20,142,-48,32,13,[4,4,4,6,6,5,6],[3,3,3,5,5,4,5])
+moveBar = new StatBar("./Assets/Icons/meters-movement.png",0,20,-140,-74,24,24,[21],[20])
 
 /*text boxes*/
 turnOrderText = new TypesetTextbox("nehyld-outline",{xMin:-160,xMax:100,yMin:-20,yMax:43})
-menuHealthValue = new TypesetTextbox("nehyld-outline",{xMin:-94,xMax:100,yMin:-90,yMax:-79})
-actionName = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:44,yMin:-51,yMax:-44})
-actionDescription = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:160,yMin:-67,yMax:-52})
-textDamage = new TypesetTextbox("nehyld-outline",{xMin:44,xMax:94,yMin:-51,yMax:-44})
-textCost = new TypesetTextbox("nehyld-outline",{xMin:94,xMax:160,yMin:-51,yMax:-44})
+menuHealthValue = new TypesetTextbox("nehyld-outline",{xMin:-102,xMax:100,yMin:-94,yMax:-80})
+actionName = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:44,yMin:-56,yMax:-49})
+actionDescription = new TypesetTextbox("nehyld-outline",{xMin:-36,xMax:160,yMin:-72,yMax:-57})
+textDamage = new TypesetTextbox("nehyld-outline",{xMin:44,xMax:94,yMin:-56,yMax:-49})
+textCost = new TypesetTextbox("nehyld-outline",{xMin:94,xMax:160,yMin:-56,yMax:-49})
 textHelp = new TypesetTextbox("nehyld-outline",{xMin:-100,xMax:100,yMin:-80,yMax:80})
-promptHelp = new TypesetTextbox("nehyld-outline",{xMin:-160,xMax:-50,yMin:-67,yMax:-52})
+promptHelp = new TypesetTextbox("nehyld-outline",{xMin:56,xMax:160,yMin:45,yMax:86})
 textVersion = new  TypesetTextbox("nehyld-outline",{xMin:-160,xMax:-50,yMin:50,yMax:85})
 textStartPrompt = new TypesetTextbox("nehyld-outline",{xMin:20,xMax:160,yMin:-95,yMax:-72})
 loadScreenTextbox = new TypesetTextbox("nehyld-outline",{xMin:-20,xMax:150,yMin:-72,yMax:-24})
+keyPrompts = new TypesetTextbox("nehyld-outline",{xMin:-20,xMax:150,yMin:-72,yMax:-24})
+skillText = new TypesetTextbox("nehyld-outline",{xMin:-31,xMax:44,yMin:-94,yMax:-83})
+charName = new TypesetTextbox("nehyld-outline",{xMin:-162,xMax:-50,yMin:-72,yMax:-56})
+
 /*currentLevel = new Level()
 currentLevel.addObject(Nigel@s)
 currentLevel.addObject(Kauplaire)
@@ -398,40 +402,47 @@ let loadScreenText = [
   "TRIVIA: |Nigel@s is left-handed!",
   "LORE: |Nigel@s is a viking warrior!",
   "TRIVIA: |Nigel@s' full name is:|Nigel@s av Derp!",
+  "CLASS: |Nigel@s is a vanguard.|He excels at defence.",
   /*Kauplaire*/
   "TRIVIA: |Kauplaire is ambidexterous |and that's with 4 limbs!",
   "LORE: |Kauplaire used to be |an actor. They were |very popular back home.",
   "LORE: |Kauplaire is an Ulekiis - |they are an arachnid |species from Cielanorfe!",
   "TRIVIA: |Kauplaire's full name is:|Kauplaire Deliarr!",
+  "CLASS: |Kauplaire is a marksman.|They excel at ranged|attacks.",
   /*Ifforrem*/
   "TRIVIA: |Ifforrem's armour is |undented!",
   "Did you know? |Ifforrem is known to eat...|rocks! This is... |*concerning!*",
   "Fun Fact! |Ifforrem has many fun facts!|(Fun Fact provided by |Ifforrem)",
   "LORE: |Ifforrem is a Merrep - |they are a mammal |species from Deruya!",
   "TRIVIA: |Ifforrem has no last|name!",
+  "CLASS: |Ifforrem is a beserker.|She excels at melee|attacks.",
   /*Calian*/
   "TRIVIA: |Calian's full name is |Dr. Calian Zariastas",
   "Fun Fact! |Calian is tired...",
   "LORE: |Calian used to be a human. |He now appears as an |Alinno - an avian species |from Deruya!",
   "TRIVIA: |Calian's design is based|off a Papuan Frogmouth,| not an owl! ",
   "TRIVIA: |Calian's full name is:|Dr Calian Zariastas!",
+  "CLASS: |Calian is an inventor.|He excels at support.",
   /*Ddwgyl*/
   "TRIVIA: |Ddwgyl's trident is called |'Kydlyfyad', which is |Llaryan for 'confluence'!",
   "TRIVIA: |Ddwgyl is pronounced: |THOO-gul",
   "Fun Fact! |Ddwgyl has fun rock facts!",
   "LORE: |Ddwgyl is a Llotelyon - |they are an amphibian |species from Deruya!",
   "TRIVIA: |Ddwgyl's full name is:|Ddwgyl Kaeffep!",
+  "CLASS: |Ddwgyl is an evoker.|She excels at healing|in large areas.",
   /*Vayens*/
   '"Gaslight, Gatekeep, |Girlboss" |- Vayens the Righteous |(probably)',
   "TRIVIA: |Vayens' blades are known as |'The Blades of Shalingaire'",
   "LORE: |Vayens used to be a military commander!",
   "LORE: |Vayens is a Raunaegis - |they are a archosaur |species from Cielanorfe!",
   "TRIVIA: |Vayens has the title:| 'The Righteous'!",
+  "CLASS: |Vayens is a crusader.|She excels at versatility| in combat.",
   /*Silaera*/
   "LORE: |Silaera mentally projects |herself into the temple! |She's actually very far away",
   "Silaera is a trans icon! |We  Silaera!",
   "LORE: |Silaera is a Tonlen - |they are a species |resembling snakes with |innate psychic powers.",
   "LORE: |Silaera is a duchess!|You can call her:|Duchess Silaera!",
+  "CLASS: |Silaera is an enchanter.|She excels at using|effects in combat.",
   /*Enemies*/
   "Did you know? |Cavros have strong |maternal instincts.",
   "Fun Fact! |All husks in the Temple |were humans.",
@@ -442,6 +453,9 @@ let loadScreenText = [
   "Are YOU getting Shrouded in the Temple?",
   "Fun Fact! |The Shrouded Temple is |situated high on Mount |Feshfen's north-east |flank.",
   '"You need a permit to be |here!" |- Cptn. Wenance "Gateface" |Galhar',
+  "Clestuard|Lofty alpine meadows",
+  "Mount Feshfen|Towering, rugged peak",
+  "Kemglais|Quaint valley village",
   /*Gameplay*/
   "Pressing [H] brings up |the controls!",
   "A grey targeting reticle |means that the action |cannot be used at all.",
@@ -464,16 +478,23 @@ let loadScreenText = [
   "Fun fact! |This loading screen is just |for vibes - it's unnecessary",
   "Some actions target the user",
   "You cannot move between |rooms whilst in combat!",
-  "Pressing [J] does...| | nothing.|"
+  "Pressing [J] does...| | nothing.|",
+  "Some doors are locked;|You cannot pass through|them.",
+  "Pots in the way can|be broken by actions.",
+  "Broken pots drop...| | nothing.",
+  "Some actions do multiple|things at once!"
 ]
 /*1: allied - will help this allegiance
 0: neutral - will not help or attack allegiance
 -1: hostile - will attack this allegiance*/
-let allegiances = {party:{party:1,allies:1,cavros:-1,cult:-1},
+allegiances = {party:{party:1,allies:1,cavros:0,cult:-1},
               allies:{party:1,allies:1,cavros:-1,cult:-1},
-              cavros:{party:-1,allies:-1,cavros:1,cult:0},
+              cavros:{party:0,allies:-1,cavros:1,cult:0},
               cult:{party:-1,allies:-1,cavros:0,cult:1}
             }
+
+skillNames = ["PREP","FOCUS","RAGE","POWER","WATER","WILL","MANA"]
+//menuNames = ["Nigel@s av Derp","Kauplaire Deliarr","Ifforrem","Calian Zariastas","Ddwgyl Kaeffep","Vayens, Righteous","Duchess Silaera"]
 
 let framesPms = 33 /*frames per millisecond*/
 let helpMenu = false
